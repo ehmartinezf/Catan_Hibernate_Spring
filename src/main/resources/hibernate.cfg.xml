@@ -31,7 +31,7 @@
 
         <!-- AQUÍ POSEU LES CLASSES QUE REPRESENTEN TAULES QUE FEU SERVIR -->
         <!-- Els enums (Pegi, Genere) NO van aquí: no són entitats -->
-        <mapping class="com.mycompany.catan_hibernate_spring.Main"/>
+        <mapping class="main.Main"/>
 
     </session-factory>
 </hibernate-configuration>
