@@ -31,10 +31,10 @@ public class Hexagon {
 
     @Column(name = "g", nullable = false)
     private int q;
-    
+
     @Column(name = "r", nullable = false)
     private int r;
-    
+
     @ManyToOne()
     private Partida partida;
 }
