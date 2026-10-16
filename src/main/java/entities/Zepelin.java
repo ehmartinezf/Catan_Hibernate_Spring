@@ -1,5 +1,6 @@
 package entities;
 
+<<<<<<< HEAD
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.InheritanceType;
@@ -59,6 +60,10 @@ public class Vertex{
 	private int id;
 	private int codi;
 
+=======
+public class Zepelin {
+    
+>>>>>>> 22b2f92a1ed9c01279d58ff2b67df1678d4c3e14
 }
 
 public class Aresta {

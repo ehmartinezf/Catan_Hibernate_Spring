@@ -1,6 +1,6 @@
 
 package enums;
 
-public enum Terreny {
+public enum TipusTerreny {
     BOSC, TURONS, PASTURES, CAMPS, MUNTANYES, DESERT
 }
