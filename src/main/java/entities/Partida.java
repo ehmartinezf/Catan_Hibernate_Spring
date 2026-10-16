@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 public class Partida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
