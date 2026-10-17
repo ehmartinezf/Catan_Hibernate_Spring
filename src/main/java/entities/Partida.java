@@ -1,11 +1,15 @@
 package entities;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import enums.EstatPartida;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +41,9 @@ public class Partida {
 
     @OneToMany(mappedBy = "partida")
     private List<Jugador> jugadors = new ArrayList<>();
+    
+    @OneToMany(mappedBy="partida", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    private Set<Vertex> vertex;
 
     public Partida() {
     }
@@ -96,4 +103,37 @@ public class Partida {
     public List<Jugador> getJugadors() {
         return jugadors;
     }
+
+	public EstatPartida getEstat() {
+		return estat;
+	}
+
+	public void setEstat(EstatPartida estat) {
+		this.estat = estat;
+	}
+
+	public int getPuntsPerGuanyar() {
+		return puntsPerGuanyar;
+	}
+
+	public void setPuntsPerGuanyar(int puntsPerGuanyar) {
+		this.puntsPerGuanyar = puntsPerGuanyar;
+	}
+
+	public Set<Vertex> getVertex() {
+		return vertex;
+	}
+
+	public void setVertex(Set<Vertex> vertex) {
+		this.vertex = vertex;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setJugadors(List<Jugador> jugadors) {
+		this.jugadors = jugadors;
+	}
+    
 }

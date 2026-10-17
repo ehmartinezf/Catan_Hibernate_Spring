@@ -8,11 +8,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "hexagon")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Hexagon {
 
     @Id
@@ -29,7 +32,7 @@ public class Hexagon {
     @Column(name = "numero", nullable = true)
     private Integer numero;
 
-    @Column(name = "g", nullable = false)
+    @Column(name = "q", nullable = false)
     private int q;
     
     @Column(name = "r", nullable = false)
