@@ -1,4 +1,5 @@
 package entities;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "partida")
 public class Partida {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,8 +43,8 @@ public class Partida {
 
     @OneToMany(mappedBy = "partida")
     private List<Jugador> jugadors = new ArrayList<>();
-    
-    @OneToMany(mappedBy="partida", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Vertex> vertex;
 
     public Partida() {
@@ -104,36 +106,36 @@ public class Partida {
         return jugadors;
     }
 
-	public EstatPartida getEstat() {
-		return estat;
-	}
+    public EstatPartida getEstat() {
+        return estat;
+    }
 
-	public void setEstat(EstatPartida estat) {
-		this.estat = estat;
-	}
+    public void setEstat(EstatPartida estat) {
+        this.estat = estat;
+    }
 
-	public int getPuntsPerGuanyar() {
-		return puntsPerGuanyar;
-	}
+    public int getPuntsPerGuanyar() {
+        return puntsPerGuanyar;
+    }
 
-	public void setPuntsPerGuanyar(int puntsPerGuanyar) {
-		this.puntsPerGuanyar = puntsPerGuanyar;
-	}
+    public void setPuntsPerGuanyar(int puntsPerGuanyar) {
+        this.puntsPerGuanyar = puntsPerGuanyar;
+    }
 
-	public Set<Vertex> getVertex() {
-		return vertex;
-	}
+    public Set<Vertex> getVertex() {
+        return vertex;
+    }
 
-	public void setVertex(Set<Vertex> vertex) {
-		this.vertex = vertex;
-	}
+    public void setVertex(Set<Vertex> vertex) {
+        this.vertex = vertex;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setJugadors(List<Jugador> jugadors) {
-		this.jugadors = jugadors;
-	}
-    
+    public void setJugadors(List<Jugador> jugadors) {
+        this.jugadors = jugadors;
+    }
+
 }

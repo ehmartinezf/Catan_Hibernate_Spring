@@ -15,24 +15,23 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="vertex")
+@Table(name = "vertex")
 public class Vertex {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
-	
-	@Column(name="codi", nullable=false)
-	private int codi;
-	
-	@OneToOne(mappedBy="vertex", cascade=CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	private Assentament assentament;
-	
-	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Set<HexagonVertex> hexagonVertex;
-	
-	@OneToMany(mappedBy="vertex", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private Partida partida;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "codi", nullable = false)
+    private int codi;
+
+    @OneToOne(mappedBy = "vertex", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Assentament assentament;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<HexagonVertex> hexagonVertex;
+
+    @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Partida partida;
 }
