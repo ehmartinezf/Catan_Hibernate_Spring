@@ -42,20 +42,27 @@ public class Partida {
     private boolean lladrePendent;
 
     @OneToMany(mappedBy = "partida")
-    private List<Jugador> jugadors = new ArrayList<>();
+    private List<Jugador> jugadors;
 
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Vertex> vertex;
 
+    @OneToMany(mappedBy = "partida", fetch = FetchType.LAZY)
+    private List<Hexagon> hexagons;
+
     public Partida() {
     }
 
-    public Partida(int puntosParaGanar) {
-        this.estat = EstatPartida.PREPARACIO;
-        this.ronda = 1;
-        this.puntsPerGuanyar = puntosParaGanar;
-        this.dausTirats = false;
-        this.lladrePendent = false;
+    public Partida(Long id, EstatPartida estat, int ronda, int puntsPerGuanyar, boolean dausTirats, boolean lladrePendent, List<Jugador> jugadors, Set<Vertex> vertex, List<Hexagon> hexagons) {
+        this.id = id;
+        this.estat = estat;
+        this.ronda = ronda;
+        this.puntsPerGuanyar = puntsPerGuanyar;
+        this.dausTirats = dausTirats;
+        this.lladrePendent = lladrePendent;
+        this.jugadors = jugadors;
+        this.vertex = vertex;
+        this.hexagons = hexagons;
     }
 
     public Long getId() {
