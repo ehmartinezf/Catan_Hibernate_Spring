@@ -32,6 +32,9 @@
         <!-- AQUÍ POSEU LES CLASSES QUE REPRESENTEN TAULES QUE FEU SERVIR -->
         <!-- Els enums (Pegi, Genere) NO van aquí: no són entitats -->
         <mapping class="main.Main"/>
+        <mapping class="entities.Partida"/>
+		<mapping class="entities.Jugador"/>
+		<mapping class="entities.Hexagon"/>
 
     </session-factory>
 </hibernate-configuration>
