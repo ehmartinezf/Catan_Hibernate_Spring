@@ -24,7 +24,6 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 
 public class Jugador {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

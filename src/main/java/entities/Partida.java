@@ -18,8 +18,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "partida")
+
 public class Partida {
-	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
