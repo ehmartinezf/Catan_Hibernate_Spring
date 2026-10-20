@@ -1,7 +1,6 @@
 package entities;
-import java.util.ArrayList;
-import java.util.List;
 import enums.EstatPartida;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "partida")
@@ -58,10 +59,19 @@ public class Partida {
     private Hexagon hexagonLladre;
 
     @OneToMany(mappedBy = "partida")
-    private List<Jugador> jugadors = new ArrayList<>();
+    private Set<Jugador> jugadors = new HashSet<>();
 
     @OneToMany(mappedBy = "partida")
-    private List<Hexagon> hexagons = new ArrayList<>();
+    private Set<Hexagon> hexagons = new HashSet<>();
+    
+    @OneToMany(mappedBy = "partida")
+    private Set<Vertex> vertexes;
+    
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Aresta> aristes;
+    
+    @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<CartaDesenvolupament> cartesDesenvolupament;
 
     public Partida() {
     }
@@ -158,19 +168,21 @@ public class Partida {
         this.hexagonLladre = hexagonLladre;
     }
 
-    public List<Jugador> getJugadors() {
+    public Set<Jugador> getJugadors() {
         return jugadors;
     }
 
-    public void setJugadors(List<Jugador> jugadors) {
+    public void setJugadors(Set<Jugador> jugadors) {
         this.jugadors = jugadors;
     }
 
-    public List<Hexagon> getHexagons() {
+    public Set<Hexagon> getHexagons() {
         return hexagons;
     }
 
-    public void setHexagons(List<Hexagon> hexagons) {
+    public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
     }
+    
+    
 }

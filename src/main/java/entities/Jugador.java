@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "jugador")
@@ -26,22 +29,22 @@ public class Jugador {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false)
+	@Column(name = "nom", nullable = false)
 	private String nom;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(name = "color", nullable = false)
 	private ColorJugador color;
 
-	@Column(nullable = false)
+	@Column(name = "ordre_torn", nullable = false)
 	private int ordreTorn;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "partida_id", nullable = false)
 	private Partida partida;
 
 	@OneToMany(mappedBy = "jugador")
-	private List<RecursJugador> recursos = new ArrayList<>();
+	private Set<RecursJugador> recursos = new HashSet<>();
 
 	public Jugador() {
 	}
@@ -89,7 +92,7 @@ public class Jugador {
 		this.partida = partida;
 	}
 
-	public List<RecursJugador> getRecursos() {
+	public Set<RecursJugador> getRecursos() {
 		return recursos;
 	}
 }

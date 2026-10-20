@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -32,6 +33,7 @@ public class Vertex {
     @OneToMany(mappedBy = "hexagonVertex", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<HexagonVertex> hexagonVertex;
 
-    @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "partida_id")
     private Partida partida;
 }
