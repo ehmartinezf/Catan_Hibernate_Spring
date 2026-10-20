@@ -16,25 +16,24 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "carta_desenvolupament")
 public class CartaDesenvolupament {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     @Enumerated(EnumType.STRING)
     private TipusCarta tipus;
-    
+
     @Column(name = "usada")
     private boolean usada;
-    
+
     @Column(name = "ronda_compra", nullable = false)
     private Integer rondaCompra;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
-    
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;

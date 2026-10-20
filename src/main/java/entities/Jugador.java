@@ -1,4 +1,5 @@
 package entities;
+
 import enums.ColorJugador;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,77 +23,81 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 
 public class Jugador {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
 
-	@Column(name = "nom", nullable = false)
-	private String nom;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "color", nullable = false)
-	private ColorJugador color;
+    @Column(name = "nom", nullable = false)
+    private String nom;
 
-	@Column(name = "ordre_torn", nullable = false)
-	private int ordreTorn;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "color", nullable = false)
+    private ColorJugador color;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "partida_id", nullable = false)
-	private Partida partida;
+    @Column(name = "ordre_torn", nullable = false)
+    private int ordreTorn;
 
-	@OneToMany(mappedBy = "jugador")
-	private Set<RecursJugador> recursos = new HashSet<>();
-        
-        @OneToMany(mappedBy = "jugador")
-        private Set<CartaDesenvolupament> cartesDesenvolupament;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "partida_id", nullable = false)
+    private Partida partida;
 
-	public Jugador() {
-	}
+    @OneToMany(mappedBy = "jugador")
+    private Set<RecursJugador> recursos = new HashSet<>();
 
-	public Jugador(String nom, ColorJugador color, int ordreTorn, Partida partida) {
-		this.nom = nom;
-		this.color = color;
-		this.ordreTorn = ordreTorn;
-		this.partida = partida;
-	}
+    @OneToMany(mappedBy = "jugador")
+    private Set<CartaDesenvolupament> cartesDesenvolupament;
 
-	public Integer getId() {
-		return id;
-	}
+    @OneToMany(mappedBy = "jugador")
+    private Set<Construccio> construccions;
 
-	public String getNom() {
-		return nom;
-	}
+    public Jugador() {
+    }
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public Jugador(String nom, ColorJugador color, int ordreTorn, Partida partida) {
+        this.nom = nom;
+        this.color = color;
+        this.ordreTorn = ordreTorn;
+        this.partida = partida;
+    }
 
-	public ColorJugador getColor() {
-		return color;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setColor(ColorJugador color) {
-		this.color = color;
-	}
+    public String getNom() {
+        return nom;
+    }
 
-	public int getOrdreTorn() {
-		return ordreTorn;
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public void setOrdreTorn(int ordreTorn) {
-		this.ordreTorn = ordreTorn;
-	}
+    public ColorJugador getColor() {
+        return color;
+    }
 
-	public Partida getPartida() {
-		return partida;
-	}
+    public void setColor(ColorJugador color) {
+        this.color = color;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    public int getOrdreTorn() {
+        return ordreTorn;
+    }
 
-	public Set<RecursJugador> getRecursos() {
-		return recursos;
-	}
+    public void setOrdreTorn(int ordreTorn) {
+        this.ordreTorn = ordreTorn;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
+
+    public Set<RecursJugador> getRecursos() {
+        return recursos;
+    }
 }

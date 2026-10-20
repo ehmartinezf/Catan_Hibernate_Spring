@@ -23,22 +23,21 @@ public class Aresta {
 
     @Column(name = "codi", nullable = false)
     private int codi;
-    
-    @OneToOne(mappedBy = "aresta", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="carretera_id", unique=true, nullable=false)
+
+    @OneToOne(mappedBy = "aresta", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "carretera_id", unique = true, nullable = false)
     private Carretera carretera;
-    
-    @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_a", nullable=false, unique=true)
+
+    @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vertex_a", nullable = false, unique = true)
     private Vertex vertexA;
-    
-    @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_B", nullable=false, unique=true)
+
+    @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vertex_B", nullable = false, unique = true)
     private Vertex vertexB;
-    
+
     @ManyToOne
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
-    
 
 }
