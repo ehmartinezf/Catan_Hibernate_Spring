@@ -44,6 +44,9 @@ public class Jugador {
 
 	@OneToMany(mappedBy = "jugador")
 	private Set<RecursJugador> recursos = new HashSet<>();
+        
+        @OneToMany(mappedBy = "jugador")
+        private Set<CartaDesenvolupament> cartesDesenvolupament;
 
 	public Jugador() {
 	}
