@@ -44,4 +44,6 @@ public class Hexagon {
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "partida_id", nullable=false, unique=true)
     private Partida partida;
+    
+    //N:M a Vertex a traves de HexagonVertex -> Ref: Videojoc, Llençament, Plataforma
 }

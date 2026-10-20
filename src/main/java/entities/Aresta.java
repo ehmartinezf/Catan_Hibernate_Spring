@@ -22,6 +22,7 @@ public class Aresta {
     private int id;
 
     @Column(name = "codi", nullable = false)
+    // @Check -> 1-72
     private int codi;
     
     @OneToOne(mappedBy = "aresta", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
@@ -29,11 +30,11 @@ public class Aresta {
     private Carretera carretera;
     
     @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_a", nullable=false, unique=true)
+    @JoinColumn(name="vertex_a", nullable=false)
     private Vertex vertexA;
     
     @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_B", nullable=false, unique=true)
+    @JoinColumn(name="vertex_B", nullable=false)
     private Vertex vertexB;
     
     @ManyToOne
