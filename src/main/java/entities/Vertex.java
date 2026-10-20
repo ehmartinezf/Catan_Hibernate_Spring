@@ -26,10 +26,10 @@ public class Vertex {
     @Column(name = "codi", nullable = false)
     private int codi;
 
-    @OneToOne(mappedBy = "vertex", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "vertex", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Assentament assentament;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(mappedBy = "hexagonVertex", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<HexagonVertex> hexagonVertex;
 
     @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
