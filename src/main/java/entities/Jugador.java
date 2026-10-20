@@ -1,6 +1,4 @@
 package entities;
-import java.util.ArrayList;
-import java.util.List;
 import enums.ColorJugador;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

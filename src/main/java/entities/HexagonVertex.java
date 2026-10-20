@@ -12,7 +12,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,7 +28,7 @@ public class HexagonVertex extends Hexagon {
     @Column(name = "posicio")
     private int posicio;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "vertex_id", nullable = false)
     private Set<Vertex> vertexes;
 }
