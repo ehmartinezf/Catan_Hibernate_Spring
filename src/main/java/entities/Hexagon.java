@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "hexagon")
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Hexagon {
 
     @Id
@@ -34,10 +34,10 @@ public class Hexagon {
 
     @Column(name = "q", nullable = false)
     private int q;
-    
+
     @Column(name = "r", nullable = false)
     private int r;
-    
+
     @ManyToOne()
     private Partida partida;
 }

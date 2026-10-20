@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "jugador")
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Jugador {
 
     @Id
@@ -23,8 +23,7 @@ public class Jugador {
 
     @Column(nullable = false)
     private String nom;
-    
-    
+
     @Column(nullable = false)
     private ColorJugador colorjugador;
 

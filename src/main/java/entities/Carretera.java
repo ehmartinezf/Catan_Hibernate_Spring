@@ -11,14 +11,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "carretara")
 public class Carretera extends Construccio {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	
 
-	@OneToOne(mappedBy = "")
-	@Column(name = "aresta_id", unique = true, nullable = false)
-	private Aresta aresta;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @OneToOne(mappedBy = "")
+    @Column(name = "aresta_id", unique = true, nullable = false)
+    private Aresta aresta;
 
 }

@@ -9,8 +9,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ciutat")
 public class Ciutat extends Assentament {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 }
