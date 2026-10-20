@@ -1,6 +1,7 @@
 package entities;
 
 import enums.TipusTerreny;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,7 +41,7 @@ public class Hexagon {
     @Column(name = "r", nullable = false)
     private int r;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "partida_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinColumn(name = "partida_id", nullable=false, unique=true)
     private Partida partida;
 }
