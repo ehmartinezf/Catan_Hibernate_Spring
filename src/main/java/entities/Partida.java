@@ -16,9 +16,9 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "partida")
-
 public class Partida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -182,7 +182,5 @@ public class Partida {
 
     public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
-    }
-    
-    
+    } 
 }
