@@ -9,30 +9,30 @@ import java.util.List;
  * que seran serialitzables
  */
 public interface IGenericDao<T, ID extends Serializable> {
-	// Com a mínim configurarem el CRUD bàsic:
+    // Com a mínim configurarem el CRUD bàsic:
 
-	/*
+    /*
 	 * INSERT i UPDATE
-	 */
-	void saveOrUpdate(T entity);
+     */
+    void saveOrUpdate(T entity);
 
-	/*
+    /*
 	 * SELECT per ID
-	 */
-	T get(ID id);
+     */
+    T get(ID id);
 
-	/*
+    /*
 	 * DELETE per ID
-	 */
-	void delete(ID id);
+     */
+    void delete(ID id);
 
-	/*
+    /*
 	 * DELETE per objecte
-	 */
-	void delete(T entity);
+     */
+    void delete(T entity);
 
-	/*
+    /*
 	 * SELECT ALL
-	 */
-	List<T> list();
+     */
+    List<T> list();
 }

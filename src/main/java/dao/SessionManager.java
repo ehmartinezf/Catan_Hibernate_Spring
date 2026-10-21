@@ -12,29 +12,29 @@ import org.hibernate.cfg.Configuration;
  */
 public class SessionManager {
 
-	private static SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
-	// Constructor privat: ningú pot fer new SessionManager()
-	private SessionManager() {
-	}
+    // Constructor privat: ningú pot fer new SessionManager()
+    private SessionManager() {
+    }
 
-	public static synchronized SessionFactory getSessionFactory() {
-		if (sessionFactory == null) {
-			try {
-				sessionFactory = new Configuration().configure("daoHibernate.cfg.xml").buildSessionFactory();
-			} catch (HibernateException e) {
-				System.err.println("Error al crear la SessionFactory: " + e.getMessage());
-				throw new ExceptionInInitializerError(e);
-			}
-		}
-		return sessionFactory;
-	}
+    public static synchronized SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+            } catch (HibernateException e) {
+                System.err.println("Error al crear la SessionFactory: " + e.getMessage());
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+        return sessionFactory;
+    }
 
-	// Cridar-lo al final del programa: allibera les connexions
-	public static synchronized void tancar() {
-		if (sessionFactory != null) {
-			sessionFactory.close();
-			sessionFactory = null;
-		}
-	}
+    // Cridar-lo al final del programa: allibera les connexions
+    public static synchronized void tancar() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            sessionFactory = null;
+        }
+    }
 }

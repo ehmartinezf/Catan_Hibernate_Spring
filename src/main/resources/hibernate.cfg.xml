@@ -30,10 +30,19 @@
 
         <!-- AQUÍ POSEU LES CLASSES QUE REPRESENTEN TAULES QUE FEU SERVIR -->
         <!-- Els enums (Pegi, Genere) NO van aquí: no són entitats -->
-        <mapping class="main.Main"/>
         <mapping class="entities.Partida"/>
-		<mapping class="entities.Jugador"/>
-		<mapping class="entities.Hexagon"/>
+        <mapping class="entities.Jugador"/>
+        <mapping class="entities.Hexagon"/>
+        <mapping class="entities.Vertex"/>
+        <mapping class="entities.Aresta"/>
+        <mapping class="entities.HexagonVertex"/>
+        <mapping class="entities.RecursJugador"/>
+        <mapping class="entities.CartaDesenvolupament"/>
+        <mapping class="entities.Construccio"/>
+        <mapping class="entities.Assentament"/>
+        <mapping class="entities.Poblat"/>
+        <mapping class="entities.Ciutat"/>
+        <mapping class="entities.Carretera"/>
 
     </session-factory>
 </hibernate-configuration>

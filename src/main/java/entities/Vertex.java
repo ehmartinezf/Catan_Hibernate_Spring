@@ -33,7 +33,7 @@ public class Vertex {
     @OneToMany(mappedBy = "hexagonVertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HexagonVertex> hexagonVertex;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "partida_id")
     private Partida partida;
 }
