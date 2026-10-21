@@ -24,8 +24,13 @@ public abstract class Construccio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+<<<<<<< HEAD
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;
+=======
+    
+    //Propietari
+>>>>>>> c4ae99173d9755e834a55272e9e567471e135792
 }
