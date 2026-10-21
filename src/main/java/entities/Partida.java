@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "partida")
 public class Partida {
@@ -184,11 +183,5 @@ public class Partida {
 
     public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
-<<<<<<< HEAD
     }
-
 }
-=======
-    } 
-}
->>>>>>> 8e00217c4a4e5697e84bd3b39008ecf0d70f7d28

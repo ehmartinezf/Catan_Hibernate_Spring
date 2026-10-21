@@ -28,7 +28,6 @@ public class Aresta {
     @OneToOne(mappedBy = "aresta", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "carretera_id", unique = true, nullable = false)
     private Carretera carretera;
-<<<<<<< HEAD
 
     @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vertex_a", nullable = false, unique = true)
@@ -36,15 +35,6 @@ public class Aresta {
 
     @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vertex_B", nullable = false, unique = true)
-=======
-    
-    @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_a", nullable=false)
-    private Vertex vertexA;
-    
-    @OneToOne(mappedBy="vertex", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="vertex_B", nullable=false)
->>>>>>> c4ae99173d9755e834a55272e9e567471e135792
     private Vertex vertexB;
 
     @ManyToOne
