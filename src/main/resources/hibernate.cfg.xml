@@ -28,7 +28,6 @@
         <property name="hibernate.use_sql_comments">true</property>
         -->
 
-
         <!-- AQUÍ POSEU LES CLASSES QUE REPRESENTEN TAULES QUE FEU SERVIR -->
         <!-- Els enums (Pegi, Genere) NO van aquí: no són entitats -->
         <mapping class="main.Main"/>
