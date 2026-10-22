@@ -1,4 +1,5 @@
 package entities;
+
 import enums.EstatPartida;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,10 +17,10 @@ import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "partida")
 public class Partida {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -63,13 +64,13 @@ public class Partida {
 
     @OneToMany(mappedBy = "partida")
     private Set<Hexagon> hexagons = new HashSet<>();
-    
+
     @OneToMany(mappedBy = "partida")
     private Set<Vertex> vertexes;
-    
+
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Aresta> aristes;
-    
+
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CartaDesenvolupament> cartesDesenvolupament;
 
@@ -182,5 +183,5 @@ public class Partida {
 
     public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
-    } 
+    }
 }

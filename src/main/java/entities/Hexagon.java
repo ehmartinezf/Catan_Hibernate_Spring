@@ -14,7 +14,9 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Table(name = "hexagon")
@@ -41,9 +43,12 @@ public class Hexagon {
     @Column(name = "r", nullable = false)
     private int r;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "partida_id", nullable=false, unique=true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "partida_id", nullable = false, unique = true)
     private Partida partida;
-    
+
+    @OneToMany(mappedBy = "hexagon")
+    private Set<HexagonVertex> hexagonVertexes;
+
     //N:M a Vertex a traves de HexagonVertex -> Ref: Videojoc, Llençament, Plataforma
 }

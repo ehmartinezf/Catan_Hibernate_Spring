@@ -14,20 +14,21 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="recurs_jugador",uniqueConstraints= {@UniqueConstraint(name="uk_id_jugador_id",columnNames={"id", "jugador_id"})})
+@Table(name = "recurs_jugador", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"id", "jugador_id"})})
 public class RecursJugador {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-	
-	@OneToOne
-	@JoinColumn(name="jugador_id")
-	private Jugador jugador;
-	
-	@Enumerated(EnumType.STRING)
-	private TipusRecurs tipusRecurs;
-	
-	@Column(name="quantitat")
-	private int quantitat;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @OneToOne
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
+
+    @Enumerated(EnumType.STRING)
+    private TipusRecurs tipusRecurs;
+
+    @Column(name = "quantitat")
+    private int quantitat;
 }
