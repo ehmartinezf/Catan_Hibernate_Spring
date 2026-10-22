@@ -15,10 +15,6 @@ import jakarta.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Assentament extends Construccio {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @OneToOne
     @JoinColumn(name = "vertex_id", unique = true, nullable = false)
     private Vertex vertex;
