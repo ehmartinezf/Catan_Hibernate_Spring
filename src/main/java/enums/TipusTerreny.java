@@ -10,11 +10,13 @@ public enum TipusTerreny {
 
     private final TipusRecurs recurs;
 
-    private TipusTerreny(TipusRecurs recurs) {
+    TipusTerreny(TipusRecurs recurs) {
         this.recurs = recurs;
     }
 
+    // Recurs que produeix el terreny (null al desert). Un enum pot tenir atributs i mètodes:
+    // Hibernate no els toca, només guarda el nom del valor (EnumType.STRING).
     public TipusRecurs getRecurs() {
-        return this.recurs;
+        return recurs;
     }
 }

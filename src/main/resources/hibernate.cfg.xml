@@ -18,6 +18,11 @@
         Quan el model sigui estable (i a la pràctica), "update". -->
         <property name="hibernate.hbm2ddl.auto">create</property>
 
+        <!-- IMPRESCINDIBLE per als DAO: sense aquesta línia getCurrentSession() peta
+        ("No CurrentSessionContext configured"). thread = una sessió per fil,
+        que es tanca sola en fer commit() o rollback(). -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
         <!-- Això ens permet xafardejar l'SQL que genera Hibernate. Opcional -->
         <property name="hibernate.show_sql">true</property>
         <!-- Això formata les sentències SQL -->
