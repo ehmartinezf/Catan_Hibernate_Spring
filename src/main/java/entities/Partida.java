@@ -48,15 +48,15 @@ public class Partida {
     @Column(name="ultima_tirada")
     private int ultimaTirada;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=false)
     @JoinColumn(name = "jugador_actiu_id")
     private Jugador jugadorActiu;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "guanyador_id")
     private Jugador guanyador;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "hexagon_lladre_id")
     private Hexagon hexagonLladre;
 
@@ -199,4 +199,26 @@ public class Partida {
     	this.pila.add(carta);
     	carta.setPartida(this);
     }
+    
+    public void eliminarJugador(Jugador jugador) {
+    	this.jugadors.remove(jugador);
+    }
+    
+    public void eliminarHexagon(Hexagon hexagon) {
+    	this.hexagons.remove(hexagon);
+    }
+    
+    public void eliminarVertex(Vertex vertex) {
+    	this.vertexes.remove(vertex);
+    }
+    
+    public void eliminarAresta(Aresta aresta) {
+    	this.arestes.remove(aresta);
+    }
+    
+    public void eliminarCartaDesenvolupament(CartaDesenvolupament cartaDesenvolupament) {
+    	this.pila.remove(cartaDesenvolupament);
+    }
+    
+    
 }
