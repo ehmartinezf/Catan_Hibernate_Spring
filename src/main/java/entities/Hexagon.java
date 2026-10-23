@@ -25,7 +25,7 @@ public class Hexagon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "codi", nullable = false, unique = true, length = 10)
     private int codi;

@@ -1,5 +1,7 @@
 package entities;
 
+import org.hibernate.annotations.Check;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,15 +16,15 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "aresta")
+@Check(constraints="codi >= 1 AND codi <= 72")
 public class Aresta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
-
+    private Integer id;
+    
     @Column(name = "codi", nullable = false)
-    // @Check -> 1-72
     private int codi;
 
     @OneToOne(mappedBy = "aresta", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -29,9 +29,9 @@ public class HexagonVertex extends Hexagon {
     @Column(name = "posicio")
     private int posicio;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "vertex_id", nullable = false)
-    private Set<Vertex> vertexes;
+    private Vertex vertex;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hexagon_id", nullable = false)

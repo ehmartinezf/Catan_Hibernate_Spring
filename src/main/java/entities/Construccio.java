@@ -17,17 +17,15 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "construccio")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipus_construccio", discriminatorType = DiscriminatorType.STRING, length = 15)
 public abstract class Construccio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "jugador_id", nullable = false)
-    private Jugador jugador;
+    private Jugador propietari;
 
-    //Propietari
 }

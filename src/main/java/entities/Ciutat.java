@@ -12,5 +12,5 @@ public class Ciutat extends Assentament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 }

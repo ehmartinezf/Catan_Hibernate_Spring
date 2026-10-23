@@ -19,7 +19,7 @@ public class CartaDesenvolupament {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     private TipusCarta tipus;
