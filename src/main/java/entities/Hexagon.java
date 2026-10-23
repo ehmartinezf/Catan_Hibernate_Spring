@@ -118,5 +118,9 @@ public class Hexagon {
 		this.hexagonVertexes.add(hexagonVertex);
 		hexagonVertex.setHexagon(this);
 	}
+	
+	public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
+		this.hexagonVertexes.remove(hexagonVertex);
+	}
 
 }

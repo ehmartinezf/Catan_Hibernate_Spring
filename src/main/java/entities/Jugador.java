@@ -38,7 +38,7 @@ public class Jugador {
     @Column(name = "ordre_torn", nullable = false)
     private int ordreTorn;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
@@ -108,5 +108,9 @@ public class Jugador {
     public void afegirConstruccio(Construccio construccio) {
     	this.construccions.add(construccio);
     	construccio.setPropietari(this);
+    }
+    
+    public void eliminarConstruccio(Construccio construccio) {
+    	this.construccions.remove(construccio);
     }
 }
