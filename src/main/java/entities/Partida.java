@@ -45,18 +45,18 @@ public class Partida {
     @Column(name = "lladre_pendent", nullable = false)
     private boolean lladrePendent;
 
-    @Column(name="ultima_tirada")
+    @Column(name = "ultima_tirada")
     private int ultimaTirada;
-    
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=false)
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinColumn(name = "jugador_actiu_id")
     private Jugador jugadorActiu;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "guanyador_id")
     private Jugador guanyador;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "hexagon_lladre_id")
     private Hexagon hexagonLladre;
 
@@ -89,6 +89,16 @@ public class Partida {
         this.puntsPerGuanyar = puntsPerGuanyar;
         this.dausTirats = false;
         this.lladrePendent = false;
+    }
+
+    public void afegirCarta(CartaDesenvolupament carta) {
+        this.pila.add(carta);
+        carta.setPartida(this);
+    }
+
+    public void eliminarCarta(CartaDesenvolupament carta) {
+        this.pila.remove(carta);
+        carta.setPartida(null);
     }
 
     public int getId() {
@@ -174,51 +184,50 @@ public class Partida {
     public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
     }
-    
+
     public void afegirJugador(Jugador jugador) {
-    	this.jugadors.add(jugador);
-    	jugador.setPartida(this);
+        this.jugadors.add(jugador);
+        jugador.setPartida(this);
     }
-    
+
     public void afegirHexagon(Hexagon hexagon) {
-    	this.hexagons.add(hexagon);
-    	hexagon.setPartida(this);
+        this.hexagons.add(hexagon);
+        hexagon.setPartida(this);
     }
-    
+
     public void afegirVertex(Vertex vertex) {
-    	this.vertexes.add(vertex);
-    	vertex.setPartida(this);
+        this.vertexes.add(vertex);
+        vertex.setPartida(this);
     }
-    
+
     public void afegirAresta(Aresta aresta) {
-    	this.arestes.add(aresta);
-    	aresta.setPartida(this);
+        this.arestes.add(aresta);
+        aresta.setPartida(this);
     }
-    
+
     public void afegirCartaDesenvolupament(CartaDesenvolupament carta) {
-    	this.pila.add(carta);
-    	carta.setPartida(this);
+        this.pila.add(carta);
+        carta.setPartida(this);
     }
-    
+
     public void eliminarJugador(Jugador jugador) {
-    	this.jugadors.remove(jugador);
+        this.jugadors.remove(jugador);
     }
-    
+
     public void eliminarHexagon(Hexagon hexagon) {
-    	this.hexagons.remove(hexagon);
+        this.hexagons.remove(hexagon);
     }
-    
+
     public void eliminarVertex(Vertex vertex) {
-    	this.vertexes.remove(vertex);
+        this.vertexes.remove(vertex);
     }
-    
+
     public void eliminarAresta(Aresta aresta) {
-    	this.arestes.remove(aresta);
+        this.arestes.remove(aresta);
     }
-    
+
     public void eliminarCartaDesenvolupament(CartaDesenvolupament cartaDesenvolupament) {
-    	this.pila.remove(cartaDesenvolupament);
+        this.pila.remove(cartaDesenvolupament);
     }
-    
-    
+
 }

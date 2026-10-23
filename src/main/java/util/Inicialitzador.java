@@ -35,7 +35,7 @@ public class Inicialitzador {
         creaTauler(em, partida);
         List<Jugador> jugadors = creaJugadors(em, partida, noms);
         creaPila(em, partida);
-        partida.setActiu(jugadors.get(0)); // el jugador d'ordreTorn 1 comença
+        partida.setJugadorActiu(jugadors.get(0)); // el jugador d'ordreTorn 1 comença
         return partida;
     }
 
@@ -116,9 +116,15 @@ public class Inicialitzador {
 
     private static void creaPila(EntityManager em, Partida partida) {
         List<CartaDesenvolupament> pila = new ArrayList<>();
-        for (int i = 0; i < 14; i++) pila.add(new CartaDesenvolupament(TipusCarta.CAVALLER));
-        for (int i = 0; i < 5; i++) pila.add(new CartaDesenvolupament(TipusCarta.PUNT_VICTORIA));
-        for (int i = 0; i < 2; i++) pila.add(new CartaDesenvolupament(TipusCarta.MONOPOLI));
+        for (int i = 0; i < 14; i++) {
+            pila.add(new CartaDesenvolupament(TipusCarta.CAVALLER));
+        }
+        for (int i = 0; i < 5; i++) {
+            pila.add(new CartaDesenvolupament(TipusCarta.PUNT_VICTORIA));
+        }
+        for (int i = 0; i < 2; i++) {
+            pila.add(new CartaDesenvolupament(TipusCarta.MONOPOLI));
+        }
         for (CartaDesenvolupament c : pila) {
             partida.afegirCarta(c);
             em.persist(c);
@@ -126,7 +132,9 @@ public class Inicialitzador {
     }
 
     private static <T> void afegir(List<T> llista, T valor, int vegades) {
-        for (int i = 0; i < vegades; i++) llista.add(valor);
+        for (int i = 0; i < vegades; i++) {
+            llista.add(valor);
+        }
     }
 
     // Si un CSV apunta a un codi que no existeix, diem QUIN fitxer i QUIN valor (en lloc d'un NullPointerException)

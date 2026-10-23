@@ -38,6 +38,15 @@ public class CartaDesenvolupament {
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;
 
+    public CartaDesenvolupament() {
+    }
+
+    public CartaDesenvolupament(TipusCarta tipus) {
+        this.tipus = tipus;
+    }
+    
+    
+
 	public Integer getId() {
 		return id;
 	}

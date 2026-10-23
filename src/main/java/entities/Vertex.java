@@ -37,6 +37,15 @@ public class Vertex {
     @JoinColumn(name = "partida_id")
     private Partida partida;
 
+    public Vertex() {
+    }
+
+    public Vertex(int codi) {
+        this.codi = codi;
+    }
+    
+    
+
 	public int getId() {
 		return id;
 	}

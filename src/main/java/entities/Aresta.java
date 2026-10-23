@@ -16,14 +16,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "aresta")
-@Check(constraints="codi >= 1 AND codi <= 72")
+@Check(constraints = "codi >= 1 AND codi <= 72")
 public class Aresta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    
+
     @Column(name = "codi", nullable = false)
     private int codi;
 
@@ -43,53 +43,55 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-	public Integer getId() {
-		return id;
-	}
+    public Aresta() {
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public int getCodi() {
-		return codi;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setCodi(int codi) {
-		this.codi = codi;
-	}
+    public int getCodi() {
+        return codi;
+    }
 
-	public Carretera getCarretera() {
-		return carretera;
-	}
+    public void setCodi(int codi) {
+        this.codi = codi;
+    }
 
-	public void setCarretera(Carretera carretera) {
-		this.carretera = carretera;
-	}
+    public Carretera getCarretera() {
+        return carretera;
+    }
 
-	public Vertex getVertexA() {
-		return vertexA;
-	}
+    public void setCarretera(Carretera carretera) {
+        this.carretera = carretera;
+    }
 
-	public void setVertexA(Vertex vertexA) {
-		this.vertexA = vertexA;
-	}
+    public Vertex getVertexA() {
+        return vertexA;
+    }
 
-	public Vertex getVertexB() {
-		return vertexB;
-	}
+    public void setVertexA(Vertex vertexA) {
+        this.vertexA = vertexA;
+    }
 
-	public void setVertexB(Vertex vertexB) {
-		this.vertexB = vertexB;
-	}
+    public Vertex getVertexB() {
+        return vertexB;
+    }
 
-	public Partida getPartida() {
-		return partida;
-	}
+    public void setVertexB(Vertex vertexB) {
+        this.vertexB = vertexB;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    public Partida getPartida() {
+        return partida;
+    }
 
-    
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
+
 }
