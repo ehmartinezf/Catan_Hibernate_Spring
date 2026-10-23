@@ -28,4 +28,20 @@ public abstract class Construccio {
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador propietari;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Jugador getPropietari() {
+		return propietari;
+	}
+
+	public void setPropietari(Jugador propietari) {
+		this.propietari = propietari;
+	}
+
 }

@@ -37,4 +37,54 @@ public class CartaDesenvolupament {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public TipusCarta getTipus() {
+		return tipus;
+	}
+
+	public void setTipus(TipusCarta tipus) {
+		this.tipus = tipus;
+	}
+
+	public boolean isUsada() {
+		return usada;
+	}
+
+	public void setUsada(boolean usada) {
+		this.usada = usada;
+	}
+
+	public Integer getRondaCompra() {
+		return rondaCompra;
+	}
+
+	public void setRondaCompra(Integer rondaCompra) {
+		this.rondaCompra = rondaCompra;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
+	public Jugador getJugador() {
+		return jugador;
+	}
+
+	public void setJugador(Jugador jugador) {
+		this.jugador = jugador;
+	}
+    
+    
 }

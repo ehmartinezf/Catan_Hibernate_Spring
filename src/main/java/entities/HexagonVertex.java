@@ -36,4 +36,37 @@ public class HexagonVertex extends Hexagon {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hexagon_id", nullable = false)
     private Hexagon hexagon;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getPosicio() {
+		return posicio;
+	}
+
+	public void setPosicio(int posicio) {
+		this.posicio = posicio;
+	}
+
+	public Vertex getVertex() {
+		return vertex;
+	}
+
+	public void setVertex(Vertex vertex) {
+		this.vertex = vertex;
+	}
+
+	public Hexagon getHexagon() {
+		return hexagon;
+	}
+
+	public void setHexagon(Hexagon hexagon) {
+		this.hexagon = hexagon;
+	}
+
 }

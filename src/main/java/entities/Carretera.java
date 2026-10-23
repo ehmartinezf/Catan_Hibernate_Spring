@@ -20,4 +20,20 @@ public class Carretera extends Construccio {
     @JoinColumn(name = "aresta_id", unique = true, nullable = false)
     private Aresta aresta;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Aresta getAresta() {
+		return aresta;
+	}
+
+	public void setAresta(Aresta aresta) {
+		this.aresta = aresta;
+	}
+
 }

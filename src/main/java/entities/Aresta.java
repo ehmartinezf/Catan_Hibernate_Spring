@@ -43,4 +43,53 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getCodi() {
+		return codi;
+	}
+
+	public void setCodi(int codi) {
+		this.codi = codi;
+	}
+
+	public Carretera getCarretera() {
+		return carretera;
+	}
+
+	public void setCarretera(Carretera carretera) {
+		this.carretera = carretera;
+	}
+
+	public Vertex getVertexA() {
+		return vertexA;
+	}
+
+	public void setVertexA(Vertex vertexA) {
+		this.vertexA = vertexA;
+	}
+
+	public Vertex getVertexB() {
+		return vertexB;
+	}
+
+	public void setVertexB(Vertex vertexB) {
+		this.vertexB = vertexB;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
+    
 }

@@ -50,5 +50,73 @@ public class Hexagon {
     @OneToMany(mappedBy = "hexagon")
     private Set<HexagonVertex> hexagonVertexes;
 
-    //N:M a Vertex a traves de HexagonVertex -> Ref: Videojoc, Llençament, Plataforma
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getCodi() {
+		return codi;
+	}
+
+	public void setCodi(int codi) {
+		this.codi = codi;
+	}
+
+	public TipusTerreny getTerreny() {
+		return terreny;
+	}
+
+	public void setTerreny(TipusTerreny terreny) {
+		this.terreny = terreny;
+	}
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public int getQ() {
+		return q;
+	}
+
+	public void setQ(int q) {
+		this.q = q;
+	}
+
+	public int getR() {
+		return r;
+	}
+
+	public void setR(int r) {
+		this.r = r;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
+	public Set<HexagonVertex> getHexagonVertexes() {
+		return hexagonVertexes;
+	}
+
+	public void setHexagonVertexes(Set<HexagonVertex> hexagonVertexes) {
+		this.hexagonVertexes = hexagonVertexes;
+	}
+	
+	public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
+		this.hexagonVertexes.add(hexagonVertex);
+		hexagonVertex.setHexagon(this);
+	}
+
 }

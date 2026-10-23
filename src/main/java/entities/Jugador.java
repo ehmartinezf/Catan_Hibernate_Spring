@@ -51,8 +51,9 @@ public class Jugador {
     @OneToMany(mappedBy = "jugador")
     private Set<Construccio> construccions;
     
+    @Column(name="cavallers_jugats")
+    private int cavallersJugats;
     
-    //CavallersJugats(int)
     
     public Jugador() {
     }
@@ -102,5 +103,10 @@ public class Jugador {
 
     public Set<RecursJugador> getRecursos() {
         return recursos;
+    }
+    
+    public void afegirConstruccio(Construccio construccio) {
+    	this.construccions.add(construccio);
+    	construccio.setJugador(this);
     }
 }

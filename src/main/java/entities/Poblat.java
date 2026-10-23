@@ -10,8 +10,5 @@ import jakarta.persistence.Table;
 @Table(name = "poblat")
 public class Poblat extends Assentament {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
 }

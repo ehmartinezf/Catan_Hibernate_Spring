@@ -1,5 +1,10 @@
 package entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.Check;
+
 import enums.EstatPartida;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,14 +16,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "partida")
+@Check(constraints = "ultimaTirada <= 2 AND ultimaTirada <= 12")
 public class Partida {
 
     @Id
@@ -41,7 +45,8 @@ public class Partida {
     @Column(name = "lladre_pendent", nullable = false)
     private boolean lladrePendent;
 
-    //int ultimaTirada
+    @Column(name="ultima_tirada")
+    private int ultimaTirada;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jugador_actiu_id")
@@ -65,10 +70,10 @@ public class Partida {
     private Set<Vertex> vertexes;
 
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Aresta> aristes;
+    private Set<Aresta> arestes;
 
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<CartaDesenvolupament> cartesDesenvolupament;
+    private Set<CartaDesenvolupament> pila;
 
     public Partida() {
     }
@@ -99,22 +104,6 @@ public class Partida {
 
     public void setRonda(int ronda) {
         this.ronda = ronda;
-    }
-
-    public Integer getDau1() {
-        return dau1;
-    }
-
-    public void setDau1(Integer dau1) {
-        this.dau1 = dau1;
-    }
-
-    public Integer getDau2() {
-        return dau2;
-    }
-
-    public void setDau2(Integer dau2) {
-        this.dau2 = dau2;
     }
 
     public int getPuntsPerGuanyar() {
@@ -179,5 +168,30 @@ public class Partida {
 
     public void setHexagons(Set<Hexagon> hexagons) {
         this.hexagons = hexagons;
+    }
+    
+    public void afegirJugador(Jugador jugador) {
+    	this.jugadors.add(jugador);
+    	jugador.setPartida(this);
+    }
+    
+    public void afegirHexagon(Hexagon hexagon) {
+    	this.hexagons.add(hexagon);
+    	hexagon.setPartida(this);
+    }
+    
+    public void afegirVertex(Vertex vertex) {
+    	this.vertexes.add(vertex);
+    	vertex.setPartida(this);
+    }
+    
+    public void afegirAresta(Aresta aresta) {
+    	this.arestes.add(aresta);
+    	aresta.setPartida(this);
+    }
+    
+    public void afegirCartaDesenvolupament(CartaDesenvolupament carta) {
+    	this.pila.add(carta);
+    	carta.setPartida(this);
     }
 }

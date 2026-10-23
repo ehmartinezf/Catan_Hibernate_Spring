@@ -19,4 +19,12 @@ public abstract class Assentament extends Construccio {
     @JoinColumn(name = "vertex_id", unique = true, nullable = false)
     private Vertex vertex;
 
+	public Vertex getVertex() {
+		return vertex;
+	}
+
+	public void setVertex(Vertex vertex) {
+		this.vertex = vertex;
+	}
+
 }

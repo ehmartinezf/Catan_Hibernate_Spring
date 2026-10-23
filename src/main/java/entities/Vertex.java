@@ -36,4 +36,46 @@ public class Vertex {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "partida_id")
     private Partida partida;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getCodi() {
+		return codi;
+	}
+
+	public void setCodi(int codi) {
+		this.codi = codi;
+	}
+
+	public Assentament getAssentament() {
+		return assentament;
+	}
+
+	public void setAssentament(Assentament assentament) {
+		this.assentament = assentament;
+	}
+
+	public Set<HexagonVertex> getHexagonVertex() {
+		return hexagonVertex;
+	}
+
+	public void setHexagonVertex(Set<HexagonVertex> hexagonVertex) {
+		this.hexagonVertex = hexagonVertex;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+    
+    
 }
