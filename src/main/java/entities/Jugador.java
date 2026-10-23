@@ -107,6 +107,6 @@ public class Jugador {
     
     public void afegirConstruccio(Construccio construccio) {
     	this.construccions.add(construccio);
-    	construccio.setJugador(this);
+    	construccio.setPropietari(this);
     }
 }

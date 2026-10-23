@@ -76,6 +76,11 @@ public class Partida {
     private Set<CartaDesenvolupament> pila;
 
     public Partida() {
+        this.estat = EstatPartida.PREPARACIO;
+        this.ronda = 1;
+        this.puntsPerGuanyar = 10;
+        this.dausTirats = false;
+        this.lladrePendent = false;
     }
 
     public Partida(int puntsPerGuanyar) {

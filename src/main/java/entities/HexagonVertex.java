@@ -22,7 +22,7 @@ public class HexagonVertex extends Hexagon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Min(value = 0, message = "La posicio minima es 0")
     @Max(value = 5, message = "La posicio maxima es 5")
@@ -37,7 +37,7 @@ public class HexagonVertex extends Hexagon {
     @JoinColumn(name = "hexagon_id", nullable = false)
     private Hexagon hexagon;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
