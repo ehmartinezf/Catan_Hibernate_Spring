@@ -50,7 +50,10 @@ public class Jugador {
 
     @OneToMany(mappedBy = "jugador")
     private Set<Construccio> construccions;
-
+    
+    
+    //CavallersJugats(int)
+    
     public Jugador() {
     }
 

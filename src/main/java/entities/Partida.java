@@ -32,12 +32,6 @@ public class Partida {
     @Column(name = "ronda", nullable = false)
     private int ronda;
 
-    @Column(name = "dau1")
-    private Integer dau1;
-
-    @Column(name = "dau2")
-    private Integer dau2;
-
     @Column(name = "punts_per_guanyar", nullable = false)
     private int puntsPerGuanyar;
 
@@ -47,15 +41,17 @@ public class Partida {
     @Column(name = "lladre_pendent", nullable = false)
     private boolean lladrePendent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //int ultimaTirada
+    
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jugador_actiu_id")
     private Jugador jugadorActiu;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guanyador_id")
     private Jugador guanyador;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hexagon_lladre_id")
     private Hexagon hexagonLladre;
 
