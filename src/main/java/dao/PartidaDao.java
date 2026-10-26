@@ -116,7 +116,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         for (String[] fila : CsvLector.llegir("hexagon_vertex.csv")) {
             Hexagon h = obtenir(hexagons, Integer.parseInt(fila[0]), "hexagon_vertex.csv");
             Vertex v = obtenir(vertexs, Integer.parseInt(fila[1]), "hexagon_vertex.csv");
-            h.afegirVertex(v, Integer.parseInt(fila[2]));
+            h.afegirHexagonVertex(v, Integer.parseInt(fila[2]));
         }
 
         // 5) persist dels hexàgons: el cascade ALL desa també els seus HexagonVertex (els vèrtexs ja existeixen)

@@ -50,77 +50,86 @@ public class Hexagon {
     @OneToMany(mappedBy = "hexagon")
     private Set<HexagonVertex> hexagonVertexes;
 
-	public Integer getId() {
-		return id;
-	}
+    public Hexagon() {
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Hexagon(int codi, int q, int r) {
+        this.codi = codi;
+        this.q = q;
+        this.r = r;
+    }
 
-	public int getCodi() {
-		return codi;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setCodi(int codi) {
-		this.codi = codi;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public TipusTerreny getTerreny() {
-		return terreny;
-	}
+    public int getCodi() {
+        return codi;
+    }
 
-	public void setTerreny(TipusTerreny terreny) {
-		this.terreny = terreny;
-	}
+    public void setCodi(int codi) {
+        this.codi = codi;
+    }
 
-	public Integer getNumero() {
-		return numero;
-	}
+    public TipusTerreny getTerreny() {
+        return terreny;
+    }
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
-	}
+    public void setTerreny(TipusTerreny terreny) {
+        this.terreny = terreny;
+    }
 
-	public int getQ() {
-		return q;
-	}
+    public Integer getNumero() {
+        return numero;
+    }
 
-	public void setQ(int q) {
-		this.q = q;
-	}
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
 
-	public int getR() {
-		return r;
-	}
+    public int getQ() {
+        return q;
+    }
 
-	public void setR(int r) {
-		this.r = r;
-	}
+    public void setQ(int q) {
+        this.q = q;
+    }
 
-	public Partida getPartida() {
-		return partida;
-	}
+    public int getR() {
+        return r;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    public void setR(int r) {
+        this.r = r;
+    }
 
-	public Set<HexagonVertex> getHexagonVertexes() {
-		return hexagonVertexes;
-	}
+    public Partida getPartida() {
+        return partida;
+    }
 
-	public void setHexagonVertexes(Set<HexagonVertex> hexagonVertexes) {
-		this.hexagonVertexes = hexagonVertexes;
-	}
-	
-	public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
-		this.hexagonVertexes.add(hexagonVertex);
-		hexagonVertex.setHexagon(this);
-	}
-	
-	public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
-		this.hexagonVertexes.remove(hexagonVertex);
-	}
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
+
+    public Set<HexagonVertex> getHexagonVertexes() {
+        return hexagonVertexes;
+    }
+
+    public void setHexagonVertexes(Set<HexagonVertex> hexagonVertexes) {
+        this.hexagonVertexes = hexagonVertexes;
+    }
+
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex, int posicio) {
+        this.hexagonVertexes.add(hexagonVertex);
+        hexagonVertex.setHexagon(this);
+    }
+
+    public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
+        this.hexagonVertexes.remove(hexagonVertex);
+    }
 
 }
