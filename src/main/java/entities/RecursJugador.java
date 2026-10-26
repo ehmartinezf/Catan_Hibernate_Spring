@@ -12,11 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 
 @Entity
 @Table(name = "recurs_jugador", uniqueConstraints = {
     @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"tipusRecurs", "jugador_id"})})
-public class RecursJugador {
+@NamedQueries({
+  @NamedQuery(name = "RecursJugador.perJugador", query = "select r from RecursJugador r where r.jugador = :jugador order by r.tipus"),
+  @NamedQuery(name = "RecursJugador.perJugadorITipus", query = "select r from RecursJugador r where r.jugador = :jugador and r.tipus = :tipus")
+})
+    public class RecursJugador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +38,40 @@ public class RecursJugador {
 
     @Column(name = "quantitat")
     private int quantitat;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Jugador getJugador() {
+		return jugador;
+	}
+
+	public void setJugador(Jugador jugador) {
+		this.jugador = jugador;
+	}
+
+	public TipusRecurs getTipusRecurs() {
+		return tipusRecurs;
+	}
+
+	public void setTipusRecurs(TipusRecurs tipusRecurs) {
+		this.tipusRecurs = tipusRecurs;
+	}
+
+	public int getQuantitat() {
+		return quantitat;
+	}
+
+	public void setQuantitat(int quantitat) {
+		this.quantitat = quantitat;
+	}
+
+    
 }
+
+
