@@ -94,4 +94,17 @@ public class Aresta {
         this.partida = partida;
     }
 
+    @Override
+	public int hashCode() {
+		return Aresta.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Aresta other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
+	}
 }

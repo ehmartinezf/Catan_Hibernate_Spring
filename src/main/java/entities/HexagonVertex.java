@@ -68,5 +68,7 @@ public class HexagonVertex extends Hexagon {
 	public void setHexagon(Hexagon hexagon) {
 		this.hexagon = hexagon;
 	}
+	
+	
 
 }
