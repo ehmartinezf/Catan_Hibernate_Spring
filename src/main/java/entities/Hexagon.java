@@ -111,7 +111,6 @@ public class Hexagon {
         return partida;
     }
 
-<<<<<<< HEAD
     public void setPartida(Partida partida) {
         this.partida = partida;
     }
@@ -124,7 +123,7 @@ public class Hexagon {
         this.hexagonVertexes = hexagonVertexes;
     }
 
-    public void afegirHexagonVertex(HexagonVertex hexagonVertex, int posicio) {
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
         this.hexagonVertexes.add(hexagonVertex);
         hexagonVertex.setHexagon(this);
     }
@@ -132,33 +131,21 @@ public class Hexagon {
     public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
         this.hexagonVertexes.remove(hexagonVertex);
     }
-=======
-	public void setHexagonVertexes(Set<HexagonVertex> hexagonVertexes) {
-		this.hexagonVertexes = hexagonVertexes;
-	}
-	
-	public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
-		this.hexagonVertexes.add(hexagonVertex);
-		hexagonVertex.setHexagon(this);
-	}
-	
-	public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
-		this.hexagonVertexes.remove(hexagonVertex);
-	}
-	
-	@Override
-	public int hashCode() {
-		return Hexagon.class.hashCode();
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Hexagon other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
->>>>>>> 8fd90340bf03dca93643a8ebed5c80dfaee6e4fe
+    @Override
+    public int hashCode() {
+        return Hexagon.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Hexagon other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
 
 }
