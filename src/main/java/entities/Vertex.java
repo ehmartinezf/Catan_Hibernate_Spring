@@ -22,7 +22,7 @@ public class Vertex {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "codi", nullable = false)
     private int codi;
@@ -46,7 +46,7 @@ public class Vertex {
     
     
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -84,6 +84,20 @@ public class Vertex {
 
 	public void setPartida(Partida partida) {
 		this.partida = partida;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Vertex.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Vertex other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
 	}
     
     

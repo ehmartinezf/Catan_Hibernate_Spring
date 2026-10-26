@@ -122,5 +122,19 @@ public class Hexagon {
 	public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
 		this.hexagonVertexes.remove(hexagonVertex);
 	}
+	
+	@Override
+	public int hashCode() {
+		return Hexagon.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Hexagon other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
+	}
 
 }

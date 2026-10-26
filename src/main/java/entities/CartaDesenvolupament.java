@@ -94,6 +94,20 @@ public class CartaDesenvolupament {
 	public void setJugador(Jugador jugador) {
 		this.jugador = jugador;
 	}
+	
+	@Override
+	public int hashCode() {
+		return CartaDesenvolupament.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof CartaDesenvolupament other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
+	}
     
     
 }

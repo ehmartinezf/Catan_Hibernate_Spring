@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.hibernate.annotations.Check;
@@ -101,7 +102,7 @@ public class Partida {
         carta.setPartida(null);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -229,5 +230,21 @@ public class Partida {
     public void eliminarCartaDesenvolupament(CartaDesenvolupament cartaDesenvolupament) {
         this.pila.remove(cartaDesenvolupament);
     }
+
+	@Override
+	public int hashCode() {
+		return Partida.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Partida other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
+	}
+    
+    
 
 }

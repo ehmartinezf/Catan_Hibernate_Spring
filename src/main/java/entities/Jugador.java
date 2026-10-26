@@ -113,4 +113,18 @@ public class Jugador {
     public void eliminarConstruccio(Construccio construccio) {
     	this.construccions.remove(construccio);
     }
+    
+    @Override
+	public int hashCode() {
+		return Jugador.class.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Jugador other))
+			return false;
+		return getId() != null && getId().equals(other.getId());
+	}
 }
