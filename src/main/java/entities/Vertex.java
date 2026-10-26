@@ -44,61 +44,65 @@ public class Vertex {
         this.codi = codi;
     }
     
-    
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex){
+        this.hexagonVertex.add(hexagonVertex);
+        hexagonVertex.setVertex(this);
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public int getCodi() {
-		return codi;
-	}
+    public int getCodi() {
+        return codi;
+    }
 
-	public void setCodi(int codi) {
-		this.codi = codi;
-	}
+    public void setCodi(int codi) {
+        this.codi = codi;
+    }
 
-	public Assentament getAssentament() {
-		return assentament;
-	}
+    public Assentament getAssentament() {
+        return assentament;
+    }
 
-	public void setAssentament(Assentament assentament) {
-		this.assentament = assentament;
-	}
+    public void setAssentament(Assentament assentament) {
+        this.assentament = assentament;
+    }
 
-	public Set<HexagonVertex> getHexagonVertex() {
-		return hexagonVertex;
-	}
+    public Set<HexagonVertex> getHexagonVertex() {
+        return hexagonVertex;
+    }
 
-	public void setHexagonVertex(Set<HexagonVertex> hexagonVertex) {
-		this.hexagonVertex = hexagonVertex;
-	}
+    public void setHexagonVertex(Set<HexagonVertex> hexagonVertex) {
+        this.hexagonVertex = hexagonVertex;
+    }
 
-	public Partida getPartida() {
-		return partida;
-	}
+    public Partida getPartida() {
+        return partida;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Vertex.class.hashCode();
-	}
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Vertex other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
-    
-    
+    @Override
+    public int hashCode() {
+        return Vertex.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Vertex other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
+
 }

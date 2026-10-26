@@ -9,11 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import java.util.Set;
 
 @Entity
 @Table(name = "hexagon_vertex")
@@ -37,38 +35,46 @@ public class HexagonVertex extends Hexagon {
     @JoinColumn(name = "hexagon_id", nullable = false)
     private Hexagon hexagon;
 
-	public Integer getId() {
-		return id;
-	}
+    public HexagonVertex() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public HexagonVertex(Vertex vertex, int posicio) {
+        this.posicio = posicio;
+        this.vertex = vertex;
+    }
+    
+    
 
-	public int getPosicio() {
-		return posicio;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setPosicio(int posicio) {
-		this.posicio = posicio;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public Vertex getVertex() {
-		return vertex;
-	}
+    public int getPosicio() {
+        return posicio;
+    }
 
-	public void setVertex(Vertex vertex) {
-		this.vertex = vertex;
-	}
+    public void setPosicio(int posicio) {
+        this.posicio = posicio;
+    }
 
-	public Hexagon getHexagon() {
-		return hexagon;
-	}
+    public Vertex getVertex() {
+        return vertex;
+    }
 
-	public void setHexagon(Hexagon hexagon) {
-		this.hexagon = hexagon;
-	}
-	
-	
+    public void setVertex(Vertex vertex) {
+        this.vertex = vertex;
+    }
+
+    public Hexagon getHexagon() {
+        return hexagon;
+    }
+
+    public void setHexagon(Hexagon hexagon) {
+        this.hexagon = hexagon;
+    }
 
 }
