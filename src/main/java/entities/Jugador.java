@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class Jugador {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -85,6 +85,14 @@ public class Jugador {
         this.color = color;
     }
 
+    public int getCavallersJugats() {
+  		return cavallersJugats;
+  	}
+
+  	public void setCavallersJugats(int cavallersJugats) {
+  		this.cavallersJugats = cavallersJugats;
+  	}
+  	
     public int getOrdreTorn() {
         return ordreTorn;
     }
