@@ -27,8 +27,8 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
     private static final int MAX_POBLATS = 5;
     private static final int MAX_CIUTATS = 4;
     private static final Random RANDOM = new Random();
-
-
+    
+    
     public void mostrarRecursos(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -40,7 +40,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
                 session.getTransaction().rollback();
                 return;
             }
-            
             System.out.println("Recursos de " + j.getNom() + ":");
             List<RecursJugador> recursos = session.createNamedQuery("RecursJugador.perJugador", RecursJugador.class).setParameter("jugador", j).getResultList();
             for (int i = 0; i < recursos.size(); i++) {
