@@ -342,6 +342,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 					}
 				}
 			} else {
+				
 				if (pos < n - 1) {
 					p.setJugadorActiu(ordre.get(pos + 1));
 				} else {
@@ -366,21 +367,29 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 		try {
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
+			
 			String error = comprovarTorn(j, false);
+			
 			if (error != null) {
 				return cancelar(session, error);
 			}
+			
 			Partida p = j.getPartida();
+			
 			if (p.getEstat() != EstatPartida.EN_CURS) {
 				return cancelar(session, "La partida no esta en curs");
 			}
+			
 			if (!p.isLladrePendent()) {
 				return cancelar(session, "No hi ha cap moviment de lladre pendent");
 			}
+			
 			Hexagon h = session.get(Hexagon.class, idHexagon);
+		
 			if (h == null || h.getPartida().getId() != p.getId()) {
 				return cancelar(session, "L'hexagon no pertany a la teva partida");
 			}
+			
 			if (p.getHexagonLladre() != null && p.getHexagonLladre().getId() == h.getId()) {
 				return cancelar(session, "El lladre s'ha de moure a un hexagon diferent de l'actual");
 			}
@@ -432,22 +441,28 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 			String error = comprovarTorn(j, true);
+			
 			if (error != null) {
 				return cancelar(session, error);
 			}
+			
 			Partida p = j.getPartida();
+			
 			if (p.getEstat() != EstatPartida.EN_CURS) {
 				return cancelar(session, "La partida no esta en curs");
 			}
+			
 			List<CartaDesenvolupament> pila = session.createQuery("select c from CartaDesenvolupament c where c.partida = :p and c.jugador is null",CartaDesenvolupament.class).setParameter("p", p).getResultList();
 			
 			if (pila.isEmpty()) {
 				return cancelar(session, "La pila de cartes esta buida");
 			}
 			error = comprovarRecursos(session, j, 0, 0, 1, 1, 1);
+			
 			if (error != null) {
 				return cancelar(session, error);
 			}
+
 			descomptarRecursos(session, j, 0, 0, 1, 1, 1);
 			CartaDesenvolupament carta = pila.get(RANDOM.nextInt(pila.size()));
 			carta.setJugador(j);
