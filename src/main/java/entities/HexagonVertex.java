@@ -42,8 +42,6 @@ public class HexagonVertex extends Hexagon {
         this.posicio = posicio;
         this.vertex = vertex;
     }
-    
-    
 
     public Integer getId() {
         return id;
@@ -75,6 +73,22 @@ public class HexagonVertex extends Hexagon {
 
     public void setHexagon(Hexagon hexagon) {
         this.hexagon = hexagon;
+    }
+
+    @Override
+    public int hashCode() {
+        return HexagonVertex.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof HexagonVertex other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
     }
 
 }

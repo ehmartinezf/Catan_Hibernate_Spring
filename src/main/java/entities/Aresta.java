@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "aresta")
+@Table(name = "Aresta")
 @Check(constraints = "codi >= 1 AND codi <= 72")
 public class Aresta {
 
@@ -28,14 +28,13 @@ public class Aresta {
     private int codi;
 
     @OneToOne(mappedBy = "aresta", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "carretera_id", unique = true, nullable = false)
     private Carretera carretera;
 
-    @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vertex_a", nullable = false, unique = true)
     private Vertex vertexA;
 
-    @OneToOne(mappedBy = "vertex", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "vertex_B", nullable = false, unique = true)
     private Vertex vertexB;
 
@@ -43,6 +42,10 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
+    public Aresta() {
+    }
+
+    
     public Aresta(Integer id, Vertex vertexA, Vertex vertexB) {
         this.id = id;
         this.vertexA = vertexA;

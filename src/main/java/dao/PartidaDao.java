@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
 import util.CsvLector;
-import util.Inicialitzador;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
 
@@ -56,7 +55,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
 
     @Override
     public int iniciarPartida(List<String> nomsJugadors) {
-        return iniciarPartida(nomsJugadors, Inicialitzador.PUNTS_PER_DEFECTE);
+        return iniciarPartida(nomsJugadors, 10);
     }
 
     public static Partida crearPartida(Session session, List<String> noms, int puntsPerGuanyar) {

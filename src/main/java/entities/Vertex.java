@@ -30,7 +30,7 @@ public class Vertex {
     @OneToOne(mappedBy = "vertex", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Assentament assentament;
 
-    @OneToMany(mappedBy = "hexagonVertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HexagonVertex> hexagonVertex;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
@@ -43,8 +43,8 @@ public class Vertex {
     public Vertex(int codi) {
         this.codi = codi;
     }
-    
-    public void afegirHexagonVertex(HexagonVertex hexagonVertex){
+
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
         this.hexagonVertex.add(hexagonVertex);
         hexagonVertex.setVertex(this);
     }
