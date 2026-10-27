@@ -1,6 +1,7 @@
 package dao;
 
 import entities.Aresta;
+import entities.Assentament;
 import entities.CartaDesenvolupament;
 import entities.Hexagon;
 import entities.HexagonVertex;
@@ -175,4 +176,32 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         }
         return valor;
     }
+
+    @Override
+    public String mostrarTauler(int idPartida) {
+	Session session = sessionFactory.getCurrentSession();
+
+    	try {
+
+    		session.beginTransaction();
+    		String resultat = this.mostrarTauler(session, idPartida);
+    		session.getTransaction().commit();
+    		return resultat;
+    	}catch(Exception e){
+    		session.getTransaction().rollback();
+    		throw new RuntimeException("Error en mostrar el taulell", e);
+    	}
+    }
+	private String mostrarTauler(EntityManager em, int idPartida) {
+		List<Hexagon> hexagons = em.createQuery("from hexagon", Hexagon.class).getResultList();
+		for(Hexagon hexagon : hexagons) {
+			System.out.println(hexagon.toString());
+			for(HexagonVertex hv : hexagon.getHexagonVertexes()) {
+				Assentament assentament = hv.getVertex().getAssentament();
+				System.out.println(assentament.toString());
+			}
+		}
+		
+		return null;
+	}
 }

@@ -16,7 +16,7 @@ public class Carretera extends Construccio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "carretera")
+    @OneToOne
     @JoinColumn(name = "aresta_id", unique = true, nullable = false)
     private Aresta aresta;
 

@@ -58,4 +58,9 @@ public abstract class Construccio {
 		return getId() != null && getId().equals(other.getId());
 	}
 
+	@Override
+	public String toString() {
+		return "ID: " + this.id + "\n" + 
+				"Propietari: " + this.propietari.getNom();
+	}
 }
