@@ -48,7 +48,7 @@ public class Jugador {
     @OneToMany(mappedBy = "jugador")
     private Set<CartaDesenvolupament> cartesDesenvolupament;
 
-    @OneToMany(mappedBy = "jugador")
+    @OneToMany(mappedBy = "propietari")
     private Set<Construccio> construccions;
     
     @Column(name="cavallers_jugats")
