@@ -230,19 +230,20 @@ public class Partida {
         this.pila.remove(cartaDesenvolupament);
     }
 
-	@Override
-	public int hashCode() {
-		return Partida.class.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return Partida.class.hashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Partida other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
-    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Partida other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
 
 }

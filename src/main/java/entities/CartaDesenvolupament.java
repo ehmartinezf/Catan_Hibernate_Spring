@@ -44,70 +44,69 @@ public class CartaDesenvolupament {
     public CartaDesenvolupament(TipusCarta tipus) {
         this.tipus = tipus;
     }
-    
-    
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public TipusCarta getTipus() {
-		return tipus;
-	}
+    public TipusCarta getTipus() {
+        return tipus;
+    }
 
-	public void setTipus(TipusCarta tipus) {
-		this.tipus = tipus;
-	}
+    public void setTipus(TipusCarta tipus) {
+        this.tipus = tipus;
+    }
 
-	public boolean isUsada() {
-		return usada;
-	}
+    public boolean isUsada() {
+        return usada;
+    }
 
-	public void setUsada(boolean usada) {
-		this.usada = usada;
-	}
+    public void setUsada(boolean usada) {
+        this.usada = usada;
+    }
 
-	public Integer getRondaCompra() {
-		return rondaCompra;
-	}
+    public Integer getRondaCompra() {
+        return rondaCompra;
+    }
 
-	public void setRondaCompra(Integer rondaCompra) {
-		this.rondaCompra = rondaCompra;
-	}
+    public void setRondaCompra(Integer rondaCompra) {
+        this.rondaCompra = rondaCompra;
+    }
 
-	public Partida getPartida() {
-		return partida;
-	}
+    public Partida getPartida() {
+        return partida;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
 
-	public Jugador getJugador() {
-		return jugador;
-	}
+    public Jugador getJugador() {
+        return jugador;
+    }
 
-	public void setJugador(Jugador jugador) {
-		this.jugador = jugador;
-	}
-	
-	@Override
-	public int hashCode() {
-		return CartaDesenvolupament.class.hashCode();
-	}
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof CartaDesenvolupament other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
-    
-    
+    @Override
+    public int hashCode() {
+        return CartaDesenvolupament.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CartaDesenvolupament other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
+
 }

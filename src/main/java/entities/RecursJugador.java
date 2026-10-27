@@ -19,10 +19,10 @@ import jakarta.persistence.NamedQuery;
 @Table(name = "recurs_jugador", uniqueConstraints = {
     @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"tipusRecurs", "jugador_id"})})
 @NamedQueries({
-  @NamedQuery(name = "RecursJugador.perJugador", query = "select r from RecursJugador r where r.jugador = :jugador order by r.tipusRecurs"),
-  @NamedQuery(name = "RecursJugador.perJugadorITipus", query = "select r from RecursJugador r where r.jugador = :jugador and r.tipusRecurs = :tipus")
+    @NamedQuery(name = "RecursJugador.perJugador", query = "select r from RecursJugador r where r.jugador = :jugador order by r.tipusRecurs"),
+    @NamedQuery(name = "RecursJugador.perJugadorITipus", query = "select r from RecursJugador r where r.jugador = :jugador and r.tipusRecurs = :tipus")
 })
-    public class RecursJugador {
+public class RecursJugador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,45 +33,57 @@ import jakarta.persistence.NamedQuery;
     private Jugador jugador;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="tipusRecurs")
+    @Column(name = "tipusRecurs")
     private TipusRecurs tipusRecurs;
 
     @Column(name = "quantitat")
     private int quantitat;
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Jugador getJugador() {
-		return jugador;
-	}
+    public Jugador getJugador() {
+        return jugador;
+    }
 
-	public void setJugador(Jugador jugador) {
-		this.jugador = jugador;
-	}
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
 
-	public TipusRecurs getTipusRecurs() {
-		return tipusRecurs;
-	}
+    public TipusRecurs getTipusRecurs() {
+        return tipusRecurs;
+    }
 
-	public void setTipusRecurs(TipusRecurs tipusRecurs) {
-		this.tipusRecurs = tipusRecurs;
-	}
+    public void setTipusRecurs(TipusRecurs tipusRecurs) {
+        this.tipusRecurs = tipusRecurs;
+    }
 
-	public int getQuantitat() {
-		return quantitat;
-	}
+    public int getQuantitat() {
+        return quantitat;
+    }
 
-	public void setQuantitat(int quantitat) {
-		this.quantitat = quantitat;
-	}
+    public void setQuantitat(int quantitat) {
+        this.quantitat = quantitat;
+    }
 
-    
+    @Override
+    public int hashCode() {
+        return RecursJugador.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof RecursJugador other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
 }
-
-

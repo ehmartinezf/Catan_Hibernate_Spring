@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class Jugador {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -50,11 +50,10 @@ public class Jugador {
 
     @OneToMany(mappedBy = "propietari")
     private Set<Construccio> construccions;
-    
-    @Column(name="cavallers_jugats")
+
+    @Column(name = "cavallers_jugats")
     private int cavallersJugats;
-    
-    
+
     public Jugador() {
     }
 
@@ -86,13 +85,13 @@ public class Jugador {
     }
 
     public int getCavallersJugats() {
-  		return cavallersJugats;
-  	}
+        return cavallersJugats;
+    }
 
-  	public void setCavallersJugats(int cavallersJugats) {
-  		this.cavallersJugats = cavallersJugats;
-  	}
-  	
+    public void setCavallersJugats(int cavallersJugats) {
+        this.cavallersJugats = cavallersJugats;
+    }
+
     public int getOrdreTorn() {
         return ordreTorn;
     }
@@ -112,27 +111,29 @@ public class Jugador {
     public Set<RecursJugador> getRecursos() {
         return recursos;
     }
-    
-    public void afegirConstruccio(Construccio construccio) {
-    	this.construccions.add(construccio);
-    	construccio.setPropietari(this);
-    }
-    
-    public void eliminarConstruccio(Construccio construccio) {
-    	this.construccions.remove(construccio);
-    }
-    
-    @Override
-	public int hashCode() {
-		return Jugador.class.hashCode();
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Jugador other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
+    public void afegirConstruccio(Construccio construccio) {
+        this.construccions.add(construccio);
+        construccio.setPropietari(this);
+    }
+
+    public void eliminarConstruccio(Construccio construccio) {
+        this.construccions.remove(construccio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Jugador.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Jugador other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
 }

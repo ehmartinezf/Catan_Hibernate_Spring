@@ -43,8 +43,8 @@ public class Vertex {
     public Vertex(int codi) {
         this.codi = codi;
     }
-    
-    public void afegirHexagonVertex(HexagonVertex hexagonVertex){
+
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
         this.hexagonVertex.add(hexagonVertex);
         hexagonVertex.setVertex(this);
     }
