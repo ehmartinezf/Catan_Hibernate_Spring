@@ -43,10 +43,10 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    public Aresta(Integer id, Integer idVertexA, Integer idVertexB) {
-    	this.id = id;
-    	this.vertexA = new Vertex(idVertexA);
-    	this.vertexB = new Vertex(idVertexB);
+    public Aresta(Integer id, Vertex vertexA, Vertex vertexB) {
+        this.id = id;
+        this.vertexA = vertexA;
+        this.vertexB = vertexB;
     }
 
     public Integer getId() {
@@ -98,16 +98,18 @@ public class Aresta {
     }
 
     @Override
-	public int hashCode() {
-		return Aresta.class.hashCode();
-	}
+    public int hashCode() {
+        return Aresta.class.hashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Aresta other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Aresta other)) {
+            return false;
+        }
+        return getId() != null && getId().equals(other.getId());
+    }
 }
