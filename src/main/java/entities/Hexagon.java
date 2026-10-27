@@ -147,5 +147,12 @@ public class Hexagon {
         }
         return getId() != null && getId().equals(other.getId());
     }
+    
+    @Override
 
+    public String toString(){
+    	return "Terreny: " + this.terreny + "\n" + 
+    			"Numero: " + this.numero + "\n" + 
+    			((this.terreny.equals(TipusTerreny.DESERT)) ? "Lladre" : "No Lladre");
+    }
 }
