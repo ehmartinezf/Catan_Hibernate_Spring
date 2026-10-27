@@ -27,6 +27,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 	private static final int MAX_CIUTATS = 4;
 	private static final Random RANDOM = new Random();
 
+	
 	public void mostrarRecursos(int idJugador) {
 		Session session = sessionFactory.getCurrentSession();
 		try {
@@ -239,8 +240,8 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			if (error != null) {
 				return cancelar(session, error);
 			}
-
-			descomptarRecursos(session, j, 0, 0, 0, 2, 3);
+			
+		    descomptarRecursos(session, j, 0, 0, 0, 2, 3);
 			session.remove(poblat);
 			session.flush();
 			Ciutat ciutat = new Ciutat();
@@ -265,12 +266,15 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			if (error != null) {
 				return cancelar(session, error);
 			}
+			
 			if (j.getPartida().getEstat() != EstatPartida.EN_CURS) {
 				return cancelar(session, "La partida no esta en curs");
 			}
+			
 			if (dona == null || rep == null) {
 				return cancelar(session, "Cal indicar els dos tipus de recurs");
 			}
+			
 			if (dona == rep) {
 				return cancelar(session, "Els recursos que dones i reps han de ser diferents");
 			}
@@ -279,18 +283,16 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			if (rDona.getQuantitat() < 4) {
 				return cancelar(session, "Sense recursos: necessites 4 " + dona);
 			}
-			
 			rDona.setQuantitat(rDona.getQuantitat() - 4);
 			afegirRecurs(session, j, rep, 1);
 			session.getTransaction().commit();
 			return "Comerç fet: 4 " + dona + " per 1 " + rep;
-			
 		} catch (RuntimeException e) {
 			handleException(session, e);
 			return "ERROR intern: " + e.getMessage();
 		}
 	}
-
+	
 	public int calcularPunts(int idJugador) {
 		Session session = sessionFactory.getCurrentSession();
 		try {
