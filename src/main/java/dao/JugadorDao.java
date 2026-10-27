@@ -30,6 +30,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 	public void mostrarRecursos(int idJugador) {
 		Session session = sessionFactory.getCurrentSession();
 		try {
+			
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 
@@ -41,11 +42,14 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			
 			System.out.println("Recursos de " + j.getNom() + ":");
 			List<RecursJugador> recursos = session.createNamedQuery("RecursJugador.perJugador", RecursJugador.class).setParameter("jugador", j).getResultList();
+			
 			for (int i = 0; i < recursos.size(); i++) {
 				RecursJugador r = recursos.get(i);
 				System.out.println("  " + r.getTipusRecurs() + ": " + r.getQuantitat());
 			}
+			
 			session.getTransaction().commit();
+			
 		} catch (RuntimeException e) {
 			handleException(session, e);
 		}
@@ -110,7 +114,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				}
 				descomptarRecursos(session, j, 1, 1, 0, 0, 0);
 			}
-
 			Carretera c = new Carretera();
 			c.setPropietari(j);
 			c.setAresta(a);
@@ -181,7 +184,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			poblat.setPropietari(j);
 			poblat.setVertex(v);
 			session.persist(poblat);
-
 			String missatge = "Poblat construit.";
 
 			if (preparacio && poblats + 1 == 2) {
@@ -395,11 +397,15 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				if (victima == null) {
 					return cancelar(session, "La victima ha de ser un altre jugador amb un assentament en aquest hexagon");
 				}
+				
 				if (totalRecursos(session, victima) == 0) {
 					return cancelar(session, "La victima no te recursos");
 				}
+				
 				TipusRecurs robat = robarRecursAleatori(session, victima, j);
+				
 				missatge += " Has robat 1 " + robat + " a " + victima.getNom();
+				
 			} else {
 				for (int i = 0; i < candidats.size(); i++) {
 					if (totalRecursos(session, candidats.get(i)) > 0) {
