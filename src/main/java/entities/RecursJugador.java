@@ -19,8 +19,8 @@ import jakarta.persistence.NamedQuery;
 @Table(name = "recurs_jugador", uniqueConstraints = {
     @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"tipusRecurs", "jugador_id"})})
 @NamedQueries({
-  @NamedQuery(name = "RecursJugador.perJugador", query = "select r from RecursJugador r where r.jugador = :jugador order by r.tipus"),
-  @NamedQuery(name = "RecursJugador.perJugadorITipus", query = "select r from RecursJugador r where r.jugador = :jugador and r.tipus = :tipus")
+  @NamedQuery(name = "RecursJugador.perJugador", query = "select r from RecursJugador r where r.jugador = :jugador order by r.tipusRecurs"),
+  @NamedQuery(name = "RecursJugador.perJugadorITipus", query = "select r from RecursJugador r where r.jugador = :jugador and r.tipusRecurs = :tipus")
 })
     public class RecursJugador {
 

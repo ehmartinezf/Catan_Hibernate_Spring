@@ -8,7 +8,4 @@ public interface IPartidaDao extends IGenericDao<Partida, Integer> {
     int iniciarPartida(List<String> nomsJugadors);
 
     int iniciarPartida(List<String> nomsJugadors, int puntsPerGuanyar);
-
-    String mostrarTauler(int idPartida);
-
 }
