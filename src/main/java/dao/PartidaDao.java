@@ -1,5 +1,13 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hibernate.Session;
+
 import entities.Aresta;
 import entities.Assentament;
 import entities.CartaDesenvolupament;
@@ -12,12 +20,7 @@ import enums.ColorJugador;
 import enums.TipusCarta;
 import enums.TipusTerreny;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import org.hibernate.Session;
+import jakarta.persistence.TypedQuery;
 import util.CsvLector;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
@@ -193,15 +196,29 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
     }
     
 	private String mostrarTauler(EntityManager em, int idPartida) {
-		List<Hexagon> hexagons = em.createQuery("from hexagon", Hexagon.class).getResultList();
+		TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
+		query.setParameter(1, idPartida);
+		List<Hexagon> hexagons = query.getResultList();
+		String resultat = "";
+		
 		for(Hexagon hexagon : hexagons) {
-			System.out.println(hexagon.toString());
+			resultat += hexagon.toString() + "\n";
 			for(HexagonVertex hv : hexagon.getHexagonVertexes()) {
 				Assentament assentament = hv.getVertex().getAssentament();
-				System.out.println(assentament.toString());
+				resultat += assentament.toString() + "\n";
 			}
 		}
 		
-		return null;
+		return resultat;
 	}
+	
+	
+	private void comprovarVictoria(EntityManager em, int idPartida) {
+		TypedQuery<Partida> query = em.createQuery("FROM partida p JOIN FETCH p.jugadors WHERE p.id =: idPartida", Partida.class);
+		query.setParameter(1, idPartida);
+		Partida partida = query.getSingleResult();
+		
+		
+	}
+	
 }
