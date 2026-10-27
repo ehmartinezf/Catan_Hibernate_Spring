@@ -43,7 +43,8 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    public Aresta() {
+    public Aresta(Integer id) {
+    	this.id = id;
     }
 
     public Integer getId() {
