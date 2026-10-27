@@ -43,8 +43,10 @@ public class Aresta {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    public Aresta(Integer id) {
+    public Aresta(Integer id, Integer idVertexA, Integer idVertexB) {
     	this.id = id;
+    	this.vertexA = new Vertex(idVertexA);
+    	this.vertexB = new Vertex(idVertexB);
     }
 
     public Integer getId() {
