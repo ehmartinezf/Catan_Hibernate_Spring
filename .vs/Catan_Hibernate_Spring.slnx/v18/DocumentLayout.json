@@ -1,17 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\",
+  "WorkspaceRootPath": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\entities\\Carretera.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\entities\\Carretera.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\dao\\JugadorDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\dao\\SessionManager.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main\\java\\dao\\GenericDao.java||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
@@ -27,38 +31,51 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "JugadorDao.java",
-              "DocumentMoniker": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java",
-              "RelativeDocumentMoniker": "src\\main\\java\\dao\\JugadorDao.java",
-              "ToolTip": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java",
-              "RelativeToolTip": "src\\main\\java\\dao\\JugadorDao.java",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001630|",
-              "WhenOpened": "2026-10-24T13:27:30.59Z",
+              "Title": "Carretera.java",
+              "DocumentMoniker": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\entities\\Carretera.java",
+              "RelativeDocumentMoniker": "src\\main\\java\\entities\\Carretera.java",
+              "ToolTip": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\entities\\Carretera.java",
+              "RelativeToolTip": "src\\main\\java\\entities\\Carretera.java",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-27T14:58:55.838Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "SessionManager.java",
-              "DocumentMoniker": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java",
-              "RelativeDocumentMoniker": "src\\main\\java\\dao\\SessionManager.java",
-              "ToolTip": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java",
-              "RelativeToolTip": "src\\main\\java\\dao\\SessionManager.java",
-              "ViewState": "AgIAABAAAAAAAAAAAAAhwCIAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001630|",
-              "WhenOpened": "2026-10-24T13:12:06.921Z"
+              "Title": "JugadorDao.java",
+              "DocumentMoniker": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java",
+              "RelativeDocumentMoniker": "src\\main\\java\\dao\\JugadorDao.java",
+              "ToolTip": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\JugadorDao.java",
+              "RelativeToolTip": "src\\main\\java\\dao\\JugadorDao.java",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-24T13:27:30.59Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "SessionManager.java",
+              "DocumentMoniker": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java",
+              "RelativeDocumentMoniker": "src\\main\\java\\dao\\SessionManager.java",
+              "ToolTip": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\SessionManager.java",
+              "RelativeToolTip": "src\\main\\java\\dao\\SessionManager.java",
+              "ViewState": "AgIAABAAAAAAAAAAAAAhwCIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-24T13:12:06.921Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "GenericDao.java",
-              "DocumentMoniker": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java",
+              "DocumentMoniker": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java",
               "RelativeDocumentMoniker": "src\\main\\java\\dao\\GenericDao.java",
-              "ToolTip": "D:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java",
+              "ToolTip": "E:\\2n DAM\\Acces a dades\\BA2\\Catan_Hibernate_Spring\\src\\main\\java\\dao\\GenericDao.java",
               "RelativeToolTip": "src\\main\\java\\dao\\GenericDao.java",
               "ViewState": "AgIAAEkAAAAAAAAAAAAhwFsAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001630|",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2026-10-24T13:11:47.465Z"
             }
           ]
