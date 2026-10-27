@@ -185,6 +185,14 @@ public class Partida {
         this.hexagons = hexagons;
     }
 
+    public int getUltimaTirada() {
+        return ultimaTirada;
+    }
+
+    public void setUltimaTirada(int ultimaTirada) {
+        this.ultimaTirada = ultimaTirada;
+    }
+
     public void afegirJugador(Jugador jugador) {
         this.jugadors.add(jugador);
         jugador.setPartida(this);
