@@ -191,6 +191,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
     		throw new RuntimeException("Error en mostrar el taulell", e);
     	}
     }
+    
 	private String mostrarTauler(EntityManager em, int idPartida) {
 		List<Hexagon> hexagons = em.createQuery("from hexagon", Hexagon.class).getResultList();
 		for(Hexagon hexagon : hexagons) {
