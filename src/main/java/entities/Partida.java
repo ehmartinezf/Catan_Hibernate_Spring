@@ -1,7 +1,6 @@
 package entities;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.hibernate.annotations.Check;
@@ -244,7 +243,6 @@ public class Partida {
 			return false;
 		return getId() != null && getId().equals(other.getId());
 	}
-    
     
 
 }

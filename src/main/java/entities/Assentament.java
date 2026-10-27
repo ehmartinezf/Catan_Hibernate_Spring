@@ -26,19 +26,5 @@ public abstract class Assentament extends Construccio {
 	public void setVertex(Vertex vertex) {
 		this.vertex = vertex;
 	}
-	
-	@Override
-	public int hashCode() {
-		return Assentament.class.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Assentament other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
 
 }
