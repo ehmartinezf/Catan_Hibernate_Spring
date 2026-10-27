@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Aresta")
+@Table(name = "aresta")
 @Check(constraints = "codi >= 1 AND codi <= 72")
 public class Aresta {
 

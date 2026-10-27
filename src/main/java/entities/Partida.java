@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "partida")
-@Check(constraints = "ultimaTirada <= 2 AND ultimaTirada <= 12")
+@Check(constraints = "ultima_tirada <= 2 AND ultima_tirada <= 12")
 public class Partida {
 
     @Id
