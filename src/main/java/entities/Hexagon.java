@@ -123,9 +123,9 @@ public class Hexagon {
         this.hexagonVertexes = hexagonVertexes;
     }
 
-    public void afegirHexagonVertex(Vertex v, int posicio) {
-        this.hexagonVertexes.add(new HexagonVertex(v, posicio));
-        v.setHexagonVertex(this);
+    public void afegirHexagonVertex(HexagonVertex hexagonVertex) {
+        this.hexagonVertexes.add(hexagonVertex);
+        hexagonVertex.setHexagon(this);
     }
 
     public void eliminarHexagonVertex(HexagonVertex hexagonVertex) {
