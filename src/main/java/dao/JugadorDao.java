@@ -724,6 +724,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 	}
 
 	private Jugador exercitMesGran(Session session, Partida p) {
+		
 		List<Jugador> jugadors = session.createQuery("select j from Jugador j where j.partida = :p order by j.cavallersJugats desc",Jugador.class).setParameter("p", p).getResultList();
 		
 		if(jugadors.isEmpty()) {
@@ -741,12 +742,14 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 		return primer;
 	}
 
+	
 	private void comprovarVictoria(Session session, Partida p) {
 		if (p.getEstat() != EstatPartida.EN_CURS) {
 			return;
 		}
-		List<Jugador> jugadors = session.createQuery("select j from Jugador j where j.partida = :p order by j.ordreTorn", Jugador.class).setParameter("p", p).getResultList();
 		
+		List<Jugador> jugadors = session.createQuery("select j from Jugador j where j.partida = :p order by j.ordreTorn", Jugador.class).setParameter("p", p).getResultList();
+
 		for (int i = 0; i < jugadors.size(); i++) {
 			Jugador j = jugadors.get(i);
 			if (punts(session, j) >= p.getPuntsPerGuanyar()) {
