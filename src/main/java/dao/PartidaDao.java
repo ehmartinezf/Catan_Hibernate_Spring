@@ -5,32 +5,28 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Session;
 
 import entities.Aresta;
 import entities.Assentament;
+import entities.Carretera;
 import entities.CartaDesenvolupament;
+import entities.Ciutat;
+import entities.Construccio;
 import entities.Hexagon;
 import entities.HexagonVertex;
 import entities.Jugador;
 import entities.Partida;
+import entities.Poblat;
+import entities.RecursJugador;
 import entities.Vertex;
 import enums.ColorJugador;
 import enums.TipusCarta;
 import enums.TipusTerreny;
 import jakarta.persistence.EntityManager;
-<<<<<<< HEAD
 import jakarta.persistence.TypedQuery;
-=======
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.hibernate.Session;
->>>>>>> e790cd330dcba59092ceee903b53395ecde03c8e
 import util.CsvLector;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
@@ -205,19 +201,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         }
     }
 
-    private String mostrarTauler(EntityManager em, int idPartida) {
-        List<Hexagon> hexagons = em.createQuery("from hexagon", Hexagon.class).getResultList();
-        for (Hexagon hexagon : hexagons) {
-            System.out.println(hexagon.toString());
-            for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
-                Assentament assentament = hv.getVertex().getAssentament();
-                System.out.println(assentament.toString());
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public String mostrarPartida(int idPartida) {
         Session session = sessionFactory.getCurrentSession();
@@ -232,7 +215,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         }
     }
     
-<<<<<<< HEAD
 	private String mostrarTauler(EntityManager em, int idPartida) {
 		TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
 		query.setParameter(1, idPartida);
@@ -259,8 +241,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
 		
 	}
 	
-=======
-    private String mostrarPartida(Session session, int idPartida){
+	private void mostrarPartida(Session session, int idPartida){
         Partida partida = session.createQuery("from partida where id = :idPartida", Partida.class)
                 .setParameter(1, idPartida)
                 .getSingleResult();
@@ -274,11 +255,32 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         for (Jugador jugador : jugadors) {
             System.out.println("NOM: " + jugador.getNom());
             System.out.println("PUNTS DE VICTORIA: ");
-            System.out.println("NOMBRE DE POBLATS: " + jugador.getConstruccions());
-            for (Jugador jugador1 : jugadors) {
-                
+           
+            Set<Construccio> construccionsJugador = jugador.getConstruccions();
+            int poblatsJugador = 0;
+    		int carreteresJugador = 0;
+            int ciutatsJugador = 0;
+            
+            for(Construccio construccio : construccionsJugador) {
+            	if(construccio instanceof Poblat) {
+            		poblatsJugador++;
+            	}else if(construccio instanceof Carretera) {
+            		carreteresJugador++;
+            	}else if(construccio instanceof Ciutat) {
+            		ciutatsJugador++;
+            	}
             }
+            System.out.println("NOMBRE DE POBLATS: " + poblatsJugador);
+            System.out.println("NOMBRE DE CIUTATS: " + ciutatsJugador);
+            System.out.println("NOMBRE DE CARRETERES: " + carreteresJugador);
+           
+            int recursosTotals = 0;
+            for(RecursJugador recurs : jugador.getRecursos()) {
+            	recursosTotals += recurs.getQuantitat();
+            }
+            
+            System.out.println("RECURSOS TOTALS: " + recursosTotals);
+            
         }
     }
->>>>>>> e790cd330dcba59092ceee903b53395ecde03c8e
 }
