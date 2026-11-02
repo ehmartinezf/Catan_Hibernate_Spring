@@ -304,8 +304,10 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 			int punts = 0;
-			if (j != null) {
-				punts = punts(session, j);
+			if (j == null) {
+			  System.out.println("El jugador no existeix");
+			} else {
+			   punts = punts(session, j);
 			}
 			session.getTransaction().commit();
 			return punts;
@@ -669,7 +671,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 	// Descompta el cost (cridar nomes despres de comprovarRecursos)
 	private void descomptarRecursos(Session session, Jugador j, int fusta, int mao, int llana, int blat, int mineral) {
 		afegirRecurs(session, j, TipusRecurs.FUSTA, -fusta);
-		afegirRecurs(session, j, TipusRecurs.MAO, -mao);
+		afegirRecurs(session, j, TipusRecurs.MAO, - mao);
 		afegirRecurs(session, j, TipusRecurs.LLANA, -llana);
 		afegirRecurs(session, j, TipusRecurs.BLAT, -blat);
 		afegirRecurs(session, j, TipusRecurs.MINERAL, -mineral);
