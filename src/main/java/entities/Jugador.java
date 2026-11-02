@@ -111,8 +111,6 @@ public class Jugador {
     public Set<RecursJugador> getRecursos() {
         return recursos;
     }
-    
-    
 
     public void afegirConstruccio(Construccio construccio) {
         this.construccions.add(construccio);
