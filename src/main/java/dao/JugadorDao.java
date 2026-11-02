@@ -40,8 +40,9 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				session.getTransaction().rollback();
 				return;
 			}
-			
+
 			System.out.println("Recursos de " + j.getNom() + ":");
+
 			List<RecursJugador> recursos = session.createNamedQuery("RecursJugador.perJugador", RecursJugador.class).setParameter("jugador", j).getResultList();
 			
 			for (int i = 0; i < recursos.size(); i++) {
@@ -133,9 +134,11 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 			String error = comprovarTorn(j, true);
+			
 			if (error != null) {
 				return cancelar(session, error);
 			}
+			
 			Partida p = j.getPartida();
 			boolean preparacio = p.getEstat() == EstatPartida.PREPARACIO;
 			Vertex v = session.get(Vertex.class, idVertex);
@@ -147,7 +150,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			if (assentamentAl(session, v) != null) {
 				return cancelar(session, "Posicio ocupada: el vertex ja te un assentament");
 			}
-
+			
 			int veins = session.createQuery("select count(a) from Assentament a where a.vertex in (select ar.vertexB from Aresta ar where ar.vertexA = :v) or a.vertex in (select ar.vertexA from Aresta ar where ar.vertexB = :v)",Long.class).setParameter("v", v).uniqueResult().intValue();
 
 			if (veins > 0) {
@@ -157,7 +160,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			int poblats = numPoblats(session, j);
 			
 			if (preparacio) {
-
 				if (poblats >= p.getRonda()) {
 					return cancelar(session, "Ja has col·locat el poblat d'aquesta ronda");
 				}
@@ -167,7 +169,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				}
 				
 			} else {
-				
 				if (carreteresPropiesAlVertex(session, j, v) == 0) {
 					return cancelar(session, "No connectat: cap carretera teva arriba a aquest vertex");
 				}
@@ -215,9 +216,11 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 			String error = comprovarTorn(j, true);
+			
 			if (error != null) {
 				return cancelar(session, error);
 			}
+			
 			Partida p = j.getPartida();
 			if (p.getEstat() != EstatPartida.EN_CURS) {
 				return cancelar(session, "La partida no esta en curs");
@@ -260,9 +263,11 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 	public String comerciarBanca(int idJugador, TipusRecurs dona, TipusRecurs rep) {
 		Session session = sessionFactory.getCurrentSession();
 		try {
+			
 			session.beginTransaction();
 			Jugador j = session.get(Jugador.class, idJugador);
 			String error = comprovarTorn(j, true);
+		    
 			if (error != null) {
 				return cancelar(session, error);
 			}
@@ -514,10 +519,12 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				}
 				List<RecursJugador> altres = session.createQuery("select r from RecursJugador r where r.jugador.partida = :p and r.jugador <> :j and r.tipus = :t",RecursJugador.class).setParameter("p", p).setParameter("j", j).setParameter("t", recurs).getResultList();
 				int total = 0;
+				
 				for (int i = 0; i < altres.size(); i++) {
 					total += altres.get(i).getQuantitat();
 					altres.get(i).setQuantitat(0);
 				}
+				
 				afegirRecurs(session, j, recurs, total);
 				missatge = "Monopoli: has rebut " + total + " " + recurs;
 
@@ -555,8 +562,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 				vertexs = session.createQuery(hql, Vertex.class).setParameter("p", p).getResultList();
 			} else {
 				hql += "and exists (select c from Carretera c where c.propietari = :j and (c.aresta.vertexA = v or c.aresta.vertexB = v)) order by v.codi";
-				vertexs = session.createQuery(hql, Vertex.class).setParameter("p", p).setParameter("j", j)
-						.getResultList();
+				vertexs = session.createQuery(hql, Vertex.class).setParameter("p", p).setParameter("j", j).getResultList();
 			}
 
 			session.getTransaction().commit();
