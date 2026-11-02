@@ -20,7 +20,17 @@ import enums.ColorJugador;
 import enums.TipusCarta;
 import enums.TipusTerreny;
 import jakarta.persistence.EntityManager;
+<<<<<<< HEAD
 import jakarta.persistence.TypedQuery;
+=======
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.hibernate.Session;
+>>>>>>> e790cd330dcba59092ceee903b53395ecde03c8e
 import util.CsvLector;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
@@ -181,20 +191,48 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
 
     @Override
     public String mostrarTauler(int idPartida) {
-	Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
 
-    	try {
+        try {
 
-    		session.beginTransaction();
-    		String resultat = this.mostrarTauler(session, idPartida);
-    		session.getTransaction().commit();
-    		return resultat;
-    	}catch(Exception e){
-    		session.getTransaction().rollback();
-    		throw new RuntimeException("Error en mostrar el taulell", e);
-    	}
+            session.beginTransaction();
+            String resultat = this.mostrarTauler(session, idPartida);
+            session.getTransaction().commit();
+            return resultat;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en mostrar el taulell", e);
+        }
+    }
+
+    private String mostrarTauler(EntityManager em, int idPartida) {
+        List<Hexagon> hexagons = em.createQuery("from hexagon", Hexagon.class).getResultList();
+        for (Hexagon hexagon : hexagons) {
+            System.out.println(hexagon.toString());
+            for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
+                Assentament assentament = hv.getVertex().getAssentament();
+                System.out.println(assentament.toString());
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String mostrarPartida(int idPartida) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            String resultat = this.mostrarPartida(session, idPartida);
+            session.getTransaction().commit();
+            return resultat;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en mostrar el taulell", e);
+        }
     }
     
+<<<<<<< HEAD
 	private String mostrarTauler(EntityManager em, int idPartida) {
 		TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
 		query.setParameter(1, idPartida);
@@ -221,4 +259,26 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
 		
 	}
 	
+=======
+    private String mostrarPartida(Session session, int idPartida){
+        Partida partida = session.createQuery("from partida where id = :idPartida", Partida.class)
+                .setParameter(1, idPartida)
+                .getSingleResult();
+        
+        System.out.println("ESTAT: " + partida.getEstat());
+        System.out.println("RONDA: " + partida.getRonda());
+        System.out.println("JUGADOR ACTIU: " + partida.getJugadorActiu());
+        System.out.println("ULTIMA TIRADA: " + partida.getUltimaTirada());
+        
+        Set<Jugador> jugadors = partida.getJugadors();
+        for (Jugador jugador : jugadors) {
+            System.out.println("NOM: " + jugador.getNom());
+            System.out.println("PUNTS DE VICTORIA: ");
+            System.out.println("NOMBRE DE POBLATS: " + jugador.getConstruccions());
+            for (Jugador jugador1 : jugadors) {
+                
+            }
+        }
+    }
+>>>>>>> e790cd330dcba59092ceee903b53395ecde03c8e
 }

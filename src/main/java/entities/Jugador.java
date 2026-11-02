@@ -111,6 +111,8 @@ public class Jugador {
     public Set<RecursJugador> getRecursos() {
         return recursos;
     }
+    
+    
 
     public void afegirConstruccio(Construccio construccio) {
         this.construccions.add(construccio);
@@ -135,5 +137,21 @@ public class Jugador {
             return false;
         }
         return getId() != null && getId().equals(other.getId());
+    }
+
+    public Set<CartaDesenvolupament> getCartesDesenvolupament() {
+        return cartesDesenvolupament;
+    }
+
+    public void setCartesDesenvolupament(Set<CartaDesenvolupament> cartesDesenvolupament) {
+        this.cartesDesenvolupament = cartesDesenvolupament;
+    }
+
+    public Set<Construccio> getConstruccions() {
+        return construccions;
+    }
+
+    public void setConstruccions(Set<Construccio> construccions) {
+        this.construccions = construccions;
     }
 }
