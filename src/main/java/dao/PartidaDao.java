@@ -23,16 +23,33 @@ import entities.Poblat;
 import entities.RecursJugador;
 import entities.Vertex;
 import enums.ColorJugador;
+import enums.EstatPartida;
 import enums.TipusCarta;
 import enums.TipusTerreny;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
+import java.util.Random;
 import util.CsvLector;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
 
     @Override
-    public int iniciarPartida(List<String> nomsJugadors, int puntsPerGuanyar) {
+    public int iniciarPartida(List<String> nomsJugadors) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            int id = iniciarPartida(session, nomsJugadors, 10);
+            if (id == -1) {
+                throw new Exception();
+            }
+            session.getTransaction().commit();
+            return id;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en iniciar partida: ", e);
+        }
+    }
+
+    private int iniciarPartida(Session session, List<String> nomsJugadors, int puntsPerGuanyar) {
 
         if (nomsJugadors == null || nomsJugadors.size() < 2 || nomsJugadors.size() > 4) {
             System.out.println("Hi ha d'haver entre 2 i 4 jugadors");
@@ -48,23 +65,37 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             System.out.println("Els punts per guanyar han de ser com a mínim 3");
             return -1;
         }
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
 
-            int id = iniciarPartida(nomsJugadors, puntsPerGuanyar);
-            session.getTransaction().commit();
-            return id;
+        Partida partida = new Partida(puntsPerGuanyar);
 
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return -1;
+        Collections.shuffle(nomsJugadors);
+        List<Integer> torns = new ArrayList<>(nomsJugadors.size());
+        for (String nomJugador : nomsJugadors) {
+            int ordreTorn;
+            boolean tornRepetit = false;
+            do {
+                Random rand = new Random();
+                ordreTorn = rand.nextInt(1, nomsJugadors.size() + 1);
+                if (torns.contains(ordreTorn)) {
+                    tornRepetit = true;
+                } else {
+                    torns.add(ordreTorn);
+                }
+            } while (tornRepetit);
+            ColorJugador color = null;
+            switch (ordreTorn) {
+                case 1 ->
+                    color = ColorJugador.VERMELL;
+                case 2 ->
+                    color = ColorJugador.BLAU;
+                case 3 ->
+                    color = ColorJugador.BLANC;
+                case 4 ->
+                    color = ColorJugador.TARONJA;
+            }
+            partida.afegirJugador(new Jugador(nomJugador, color, ordreTorn, partida));
         }
-    }
-
-    @Override
-    public int iniciarPartida(List<String> nomsJugadors) {
-        return iniciarPartida(nomsJugadors, 10);
+        return -1;
     }
 
     public static Partida crearPartida(Session session, List<String> noms, int puntsPerGuanyar) {
@@ -190,14 +221,53 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         Session session = sessionFactory.getCurrentSession();
 
         try {
-
             session.beginTransaction();
-            String resultat = this.mostrarTauler(session, idPartida);
+            String resultat = mostrarTauler(session, idPartida);
             session.getTransaction().commit();
             return resultat;
         } catch (Exception e) {
             session.getTransaction().rollback();
             throw new RuntimeException("Error en mostrar el taulell", e);
+        }
+    }
+
+    private String mostrarTauler(Session session, int idPartida) {
+        List<Hexagon> hexagons = session.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id = :idPartida", Hexagon.class).setParameter("idPartida", idPartida).getResultList();
+        String resultat = "";
+
+        for (Hexagon hexagon : hexagons) {
+            resultat += hexagon.toString() + "\n";
+            for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
+                Assentament assentament = hv.getVertex().getAssentament();
+                resultat += assentament.toString() + "\n";
+            }
+        }
+
+        return resultat;
+    }
+
+    @Override
+    public void comprovarVictoria(int idPartida) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            comprovarVictoria(session, idPartida);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en comprovar la victoria: ", e);
+        }
+    }
+
+    private void comprovarVictoria(Session session, int idPartida) {
+        Partida partida = session.createQuery("FROM partida p JOIN FETCH p.jugadors WHERE p.id =: idPartida", Partida.class).setParameter("idPartida", idPartida).getSingleResult();
+        JugadorDao jd = new JugadorDao();
+        for (Jugador jugador : partida.getJugadors()) {
+            int punts = jd.calcularPunts(jugador.getId());
+            if (punts >= jugador.getPartida().getPuntsPerGuanyar()) {
+                partida.setEstat(EstatPartida.FINALITZADA);
+                partida.setGuanyador(jugador);
+            }
         }
     }
 
@@ -213,30 +283,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             session.getTransaction().rollback();
             throw new RuntimeException("Error en mostrar el taulell", e);
         }
-    }
-
-    private String mostrarTauler(EntityManager em, int idPartida) {
-        TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
-        query.setParameter(1, idPartida);
-        List<Hexagon> hexagons = query.getResultList();
-        String resultat = "";
-
-        for (Hexagon hexagon : hexagons) {
-            resultat += hexagon.toString() + "\n";
-            for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
-                Assentament assentament = hv.getVertex().getAssentament();
-                resultat += assentament.toString() + "\n";
-            }
-        }
-
-        return resultat;
-    }
-
-    private void comprovarVictoria(EntityManager em, int idPartida) {
-        TypedQuery<Partida> query = em.createQuery("FROM partida p JOIN FETCH p.jugadors WHERE p.id =: idPartida", Partida.class);
-        query.setParameter(1, idPartida);
-        Partida partida = query.getSingleResult();
-
     }
 
     private String mostrarPartida(Session session, int idPartida) {
