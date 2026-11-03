@@ -206,7 +206,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         Session session = sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
-            String resultat = this.mostrarPartida(session, idPartida);
+            String resultat = mostrarPartida(session, idPartida);
             session.getTransaction().commit();
             return resultat;
         } catch (Exception e) {
@@ -214,73 +214,81 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             throw new RuntimeException("Error en mostrar el taulell", e);
         }
     }
-    
-	private String mostrarTauler(EntityManager em, int idPartida) {
-		TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
-		query.setParameter(1, idPartida);
-		List<Hexagon> hexagons = query.getResultList();
-		String resultat = "";
-		
-		for(Hexagon hexagon : hexagons) {
-			resultat += hexagon.toString() + "\n";
-			for(HexagonVertex hv : hexagon.getHexagonVertexes()) {
-				Assentament assentament = hv.getVertex().getAssentament();
-				resultat += assentament.toString() + "\n";
-			}
-		}
-		
-		return resultat;
-	}
-	
-	
-	private void comprovarVictoria(EntityManager em, int idPartida) {
-		TypedQuery<Partida> query = em.createQuery("FROM partida p JOIN FETCH p.jugadors WHERE p.id =: idPartida", Partida.class);
-		query.setParameter(1, idPartida);
-		Partida partida = query.getSingleResult();
-		
-		
-	}
-	
-	private void mostrarPartida(Session session, int idPartida){
-        Partida partida = session.createQuery("from partida where id = :idPartida", Partida.class)
-                .setParameter(1, idPartida)
-                .getSingleResult();
-        
-        System.out.println("ESTAT: " + partida.getEstat());
-        System.out.println("RONDA: " + partida.getRonda());
-        System.out.println("JUGADOR ACTIU: " + partida.getJugadorActiu());
-        System.out.println("ULTIMA TIRADA: " + partida.getUltimaTirada());
-        
-        Set<Jugador> jugadors = partida.getJugadors();
-        for (Jugador jugador : jugadors) {
-            System.out.println("NOM: " + jugador.getNom());
-            System.out.println("PUNTS DE VICTORIA: ");
-           
-            Set<Construccio> construccionsJugador = jugador.getConstruccions();
-            int poblatsJugador = 0;
-    		int carreteresJugador = 0;
-            int ciutatsJugador = 0;
-            
-            for(Construccio construccio : construccionsJugador) {
-            	if(construccio instanceof Poblat) {
-            		poblatsJugador++;
-            	}else if(construccio instanceof Carretera) {
-            		carreteresJugador++;
-            	}else if(construccio instanceof Ciutat) {
-            		ciutatsJugador++;
-            	}
+
+    private String mostrarTauler(EntityManager em, int idPartida) {
+        TypedQuery<Hexagon> query = em.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id =: id", Hexagon.class);
+        query.setParameter(1, idPartida);
+        List<Hexagon> hexagons = query.getResultList();
+        String resultat = "";
+
+        for (Hexagon hexagon : hexagons) {
+            resultat += hexagon.toString() + "\n";
+            for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
+                Assentament assentament = hv.getVertex().getAssentament();
+                resultat += assentament.toString() + "\n";
             }
-            System.out.println("NOMBRE DE POBLATS: " + poblatsJugador);
-            System.out.println("NOMBRE DE CIUTATS: " + ciutatsJugador);
-            System.out.println("NOMBRE DE CARRETERES: " + carreteresJugador);
-           
-            int recursosTotals = 0;
-            for(RecursJugador recurs : jugador.getRecursos()) {
-            	recursosTotals += recurs.getQuantitat();
-            }
-            
-            System.out.println("RECURSOS TOTALS: " + recursosTotals);
-            
         }
+
+        return resultat;
     }
+
+    private void comprovarVictoria(EntityManager em, int idPartida) {
+        TypedQuery<Partida> query = em.createQuery("FROM partida p JOIN FETCH p.jugadors WHERE p.id =: idPartida", Partida.class);
+        query.setParameter(1, idPartida);
+        Partida partida = query.getSingleResult();
+
+    }
+
+    private String mostrarPartida(Session session, int idPartida) {
+        Partida partida = session.createQuery("from Partida where id = :idPartida", Partida.class)
+                .setParameter("idPartida", idPartida)
+                .getSingleResult();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("ESTAT: ").append(partida.getEstat()).append("\n");
+        sb.append("RONDA: ").append(partida.getRonda()).append("\n");
+        sb.append("JUGADOR ACTIU: ").append(partida.getJugadorActiu()).append("\n");
+        sb.append("ULTIMA TIRADA: ").append(partida.getUltimaTirada()).append("\n");
+
+        Set<Jugador> jugadors = partida.getJugadors();
+
+        for (Jugador jugador : jugadors) {
+            sb.append("\n-----------------------------\n");
+            sb.append("NOM: ").append(jugador.getNom()).append("\n");
+            sb.append("PUNTS DE VICTORIA: ")
+                    .append(jugador.getPartida().getPuntsPerGuanyar()).append("\n");
+
+            Set<Construccio> construccionsJugador = jugador.getConstruccions();
+
+            int poblatsJugador = 0;
+            int carreteresJugador = 0;
+            int ciutatsJugador = 0;
+
+            for (Construccio construccio : construccionsJugador) {
+                if (construccio instanceof Poblat) {
+                    poblatsJugador++;
+                } else if (construccio instanceof Carretera) {
+                    carreteresJugador++;
+                } else if (construccio instanceof Ciutat) {
+                    ciutatsJugador++;
+                }
+            }
+
+            sb.append("NOMBRE DE POBLATS: ").append(poblatsJugador).append("\n");
+            sb.append("NOMBRE DE CIUTATS: ").append(ciutatsJugador).append("\n");
+            sb.append("NOMBRE DE CARRETERES: ").append(carreteresJugador).append("\n");
+
+            int recursosTotals = 0;
+
+            for (RecursJugador recurs : jugador.getRecursos()) {
+                recursosTotals += recurs.getQuantitat();
+            }
+
+            sb.append("RECURSOS TOTALS: ").append(recursosTotals).append("\n");
+        }
+
+        return sb.toString();
+    }
+
 }
