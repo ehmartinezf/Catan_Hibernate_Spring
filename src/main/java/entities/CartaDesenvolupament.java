@@ -27,7 +27,7 @@ public class CartaDesenvolupament {
     @Column(name = "usada")
     private boolean usada;
 
-    @Column(name = "ronda_compra", nullable = false)
+    @Column(name = "ronda_compra")
     private Integer rondaCompra;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,7 +35,7 @@ public class CartaDesenvolupament {
     private Partida partida;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "jugador_id", nullable = false)
+    @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
     public CartaDesenvolupament() {

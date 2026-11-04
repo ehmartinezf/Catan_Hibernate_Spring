@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "hexagon_vertex")
-public class HexagonVertex extends Hexagon {
+public class HexagonVertex {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class HexagonVertex extends Hexagon {
     @Column(name = "posicio")
     private int posicio;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vertex_id", nullable = false)
     private Vertex vertex;
 

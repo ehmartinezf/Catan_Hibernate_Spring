@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Random;
 import org.hibernate.Session;
 
-public class JugadorDao extends GenericDao<Jugador, Integer> {
+public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugadorDao {
 
     private static final int MAX_CARRETERES = 15;
     private static final int MAX_POBLATS = 5;
     private static final int MAX_CIUTATS = 4;
     private static final Random RANDOM = new Random();
 
-
+    @Override
     public void mostrarRecursos(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -55,7 +55,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String construirCarretera(int idJugador, int idAresta) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -70,7 +70,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 
             Aresta a = session.get(Aresta.class, idAresta);
             if (a == null || a.getPartida().getId() != p.getId()) {
-                return cancelar(session, Missatges.ARESTA_ALTRA_PARTIDA);
+                return cancelar(session, Missatges.ALTRA_PARTIDA);
             }
 
             int ocupada = session.createQuery("select count(c) from Carretera c where c.aresta = :a", Long.class).setParameter("a", a).uniqueResult().intValue();
@@ -82,10 +82,10 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
                 int carreteres = numCarreteres(session, j);
                 int poblats = numPoblats(session, j);
                 if (carreteres >= poblats) {
-                    return cancelar(session, Missatges.PREP_CARRETERA_SENSE_POBLAT);
+                    return cancelar(session, Missatges.PREP_POBLAT_PRIMER);
                 }
                 if (carreteres >= p.getRonda()) {
-                    return cancelar(session, Missatges.PREP_CARRETERA_JA_COLLOCADA);
+                    return cancelar(session, Missatges.PREP_CARRETERA_JA_COLOCADA);
                 }
 
                 boolean toca = false;
@@ -99,16 +99,16 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
                     }
                 }
                 if (!toca) {
-                    return cancelar(session, Missatges.NO_TOCA_POBLAT_NOU);
+                    return cancelar(session, Missatges.PREP_CARRETERA_POBLAT);
                 }
             } else {
                 int construccions = session.createQuery("select count(x) from Assentament x where x.propietari = :j and (x.vertex = :va or x.vertex = :vb)", Long.class).setParameter("j", j).setParameter("va", a.getVertexA()).setParameter("vb", a.getVertexB()).uniqueResult().intValue();
                 int carreteres = carreteresPropiesAlVertex(session, j, a.getVertexA()) + carreteresPropiesAlVertex(session, j, a.getVertexB());
                 if (construccions + carreteres == 0) {
-                    return cancelar(session, Missatges.ARESTA_NO_CONNECTADA);
+                    return cancelar(session, Missatges.NO_CONNECTAT);
                 }
                 if (numCarreteres(session, j) >= MAX_CARRETERES) {
-                    return cancelar(session, Missatges.LIMIT_ASSOLIT + MAX_CARRETERES + " carreteres");
+                    return cancelar(session, Missatges.LIMIT_CARRETERES + MAX_CARRETERES + " carreteres");
                 }
                 error = comprovarRecursos(session, j, 1, 1, 0, 0, 0);
                 if (error != null) {
@@ -129,7 +129,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String construirPoblat(int idJugador, int idVertex) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -144,7 +144,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 
             Vertex v = session.get(Vertex.class, idVertex);
             if (v == null || v.getPartida().getId() != p.getId()) {
-                return cancelar(session, Missatges.VERTEX_ALTRA_PARTIDA);
+                return cancelar(session, Missatges.ALTRA_PARTIDA);
             }
 
             if (assentamentAl(session, v) != null) {
@@ -152,7 +152,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             }
 
             int veins = session.createQuery("select count(a) from Assentament a where a.vertex in (select ar.vertexB from Aresta ar where ar.vertexA = :v) or a.vertex in (select ar.vertexA from Aresta ar where ar.vertexB = :v)", Long.class).setParameter("v", v).uniqueResult().intValue();
-           
+
             if (veins > 0) {
                 return cancelar(session, Missatges.REGLA_DISTANCIA);
             }
@@ -160,17 +160,17 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             int poblats = numPoblats(session, j);
             if (preparacio) {
                 if (poblats >= p.getRonda()) {
-                    return cancelar(session, Missatges.PREP_POBLAT_JA_COLLOCAT);
+                    return cancelar(session, Missatges.PREP_POBLAT_JA_COLOCAT);
                 }
                 if (poblats > numCarreteres(session, j)) {
-                    return cancelar(session, Missatges.PREP_POBLAT_SENSE_CARRETERA);
+                    return cancelar(session, Missatges.PREP_CARRETERA_PRIMER);
                 }
             } else {
                 if (carreteresPropiesAlVertex(session, j, v) == 0) {
-                    return cancelar(session, Missatges.VERTEX_NO_CONNECTAT);
+                    return cancelar(session, Missatges.NO_CONNECTAT);
                 }
                 if (poblats >= MAX_POBLATS) {
-                    return cancelar(session, Missatges.LIMIT_ASSOLIT + MAX_POBLATS + " poblats");
+                    return cancelar(session, Missatges.LIMIT_POBLATS + MAX_POBLATS + " poblats");
                 }
                 error = comprovarRecursos(session, j, 1, 1, 1, 1, 0);
                 if (error != null) {
@@ -209,7 +209,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String millorarACiutat(int idJugador, int idVertex) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -221,21 +221,21 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             }
             Partida p = j.getPartida();
             if (p.getEstat() != EstatPartida.EN_CURS) {
-                return cancelar(session, Missatges.PARTIDA_NO_EN_CURS);
+                return cancelar(session, Missatges.NOMES_EN_CURS);
             }
 
             Vertex v = session.get(Vertex.class, idVertex);
             if (v == null || v.getPartida().getId() != p.getId()) {
-                return cancelar(session, Missatges.VERTEX_ALTRA_PARTIDA);
+                return cancelar(session, Missatges.ALTRA_PARTIDA);
             }
 
             Poblat poblat = session.createQuery("select x from Poblat x where x.vertex = :v and x.propietari = :j", Poblat.class).setParameter("v", v).setParameter("j", j).uniqueResult();
             if (poblat == null) {
-                return cancelar(session, Missatges.NO_HI_HA_POBLAT_PER_MILLORAR);
+                return cancelar(session, Missatges.NO_HI_HA_POBLAT);
             }
 
             if (numCiutats(session, j) >= MAX_CIUTATS) {
-                return cancelar(session, Missatges.LIMIT_ASSOLIT + MAX_CIUTATS + " ciutats");
+                return cancelar(session, Missatges.LIMIT_CIUTATS + MAX_CIUTATS + " ciutats");
             }
             error = comprovarRecursos(session, j, 0, 0, 0, 2, 3);
             if (error != null) {
@@ -244,7 +244,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             descomptarRecursos(session, j, 0, 0, 0, 2, 3);
 
             session.remove(poblat);
-            session.flush(); 
+            session.flush();
             Ciutat ciutat = new Ciutat();
             ciutat.setPropietari(j);
             ciutat.setVertex(v);
@@ -260,7 +260,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-   
+    @Override
     public String comerciarBanca(int idJugador, TipusRecurs dona, TipusRecurs rep) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -271,13 +271,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
                 return cancelar(session, error);
             }
             if (j.getPartida().getEstat() != EstatPartida.EN_CURS) {
-                return cancelar(session, Missatges.PARTIDA_NO_EN_CURS);
+                return cancelar(session, Missatges.NOMES_EN_CURS);
             }
             if (dona == null || rep == null) {
                 return cancelar(session, Missatges.CAL_DOS_TIPUS_RECURS);
             }
             if (dona == rep) {
-                return cancelar(session, Missatges.RECURSOS_IGUALS);
+                return cancelar(session, Missatges.COMERC_IGUALS);
             }
 
             RecursJugador rDona = recurs(session, j, dona);
@@ -294,7 +294,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public int calcularPunts(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -312,7 +312,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String passarTorn(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -330,7 +330,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 
             if (p.getEstat() == EstatPartida.PREPARACIO) {
                 if (numPoblats(session, j) < p.getRonda() || numCarreteres(session, j) < p.getRonda()) {
-                    return cancelar(session, Missatges.PREP_PASSAR_INCOMPLET);
+                    return cancelar(session, Missatges.PREP_CAL_COMPLETAR);
                 }
                 if (p.getRonda() == 1) {
                     if (pos < n - 1) {
@@ -365,20 +365,19 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
-
+    @Override
     public String moureLladre(int idJugador, int idHexagon, Integer idJugadorVictima) {
         Session session = sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
             Jugador j = session.get(Jugador.class, idJugador);
-            String error = comprovarTorn(j, false); 
+            String error = comprovarTorn(j, false);
             if (error != null) {
                 return cancelar(session, error);
             }
             Partida p = j.getPartida();
             if (p.getEstat() != EstatPartida.EN_CURS) {
-                return cancelar(session, Missatges.PARTIDA_NO_EN_CURS);
+                return cancelar(session, Missatges.NOMES_EN_CURS);
             }
             if (!p.isLladrePendent()) {
                 return cancelar(session, Missatges.LLADRE_NO_PENDENT);
@@ -386,7 +385,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 
             Hexagon h = session.get(Hexagon.class, idHexagon);
             if (h == null || h.getPartida().getId() != p.getId()) {
-                return cancelar(session, Missatges.HEXAGON_ALTRA_PARTIDA);
+                return cancelar(session, Missatges.ALTRA_PARTIDA);
             }
             if (p.getHexagonLladre() != null && p.getHexagonLladre().getId() == h.getId()) {
                 return cancelar(session, Missatges.LLADRE_MATEIX_HEXAGON);
@@ -403,17 +402,17 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
                     }
                 }
                 if (victima == null) {
-                    return cancelar(session, Missatges.VICTIMA_NO_VALIDA);
+                    return cancelar(session, Missatges.VICTIMA_INVALIDA);
                 }
                 if (totalRecursos(session, victima) == 0) {
-                    return cancelar(session, Missatges.VICTIMA_SENSE_RECURSOS);
+                    return cancelar(session, Missatges.VICTIMA_INVALIDA);
                 }
                 TipusRecurs robat = robarRecursAleatori(session, victima, j);
                 missatge += " Has robat 1 " + robat + " a " + victima.getNom();
             } else {
                 for (int i = 0; i < candidats.size(); i++) {
                     if (totalRecursos(session, candidats.get(i)) > 0) {
-                        return cancelar(session, Missatges.CAL_INDICAR_VICTIMA);
+                        return cancelar(session, Missatges.VICTIMA_OBLIGATORIA);
                     }
                 }
             }
@@ -430,7 +429,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String comprarCarta(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -442,10 +441,10 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             }
             Partida p = j.getPartida();
             if (p.getEstat() != EstatPartida.EN_CURS) {
-                return cancelar(session, Missatges.PARTIDA_NO_EN_CURS);
+                return cancelar(session, Missatges.NOMES_EN_CURS);
             }
 
-            List<CartaDesenvolupament> pila = session.createQuery("select c from CartaDesenvolupament c where c.partida = :p and c.jugador is null",CartaDesenvolupament.class).setParameter("p", p).getResultList();
+            List<CartaDesenvolupament> pila = session.createQuery("select c from CartaDesenvolupament c where c.partida = :p and c.jugador is null", CartaDesenvolupament.class).setParameter("p", p).getResultList();
             if (pila.isEmpty()) {
                 return cancelar(session, Missatges.PILA_BUIDA);
             }
@@ -469,7 +468,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public String jugarCarta(int idJugador, int idCarta, TipusRecurs recurs) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -481,7 +480,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
             }
             Partida p = j.getPartida();
             if (p.getEstat() != EstatPartida.EN_CURS) {
-                return cancelar(session, Missatges.PARTIDA_NO_EN_CURS);
+                return cancelar(session, Missatges.NOMES_EN_CURS);
             }
 
             CartaDesenvolupament carta = session.get(CartaDesenvolupament.class, idCarta);
@@ -503,10 +502,10 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
 
             } else if (carta.getTipus() == TipusCarta.MONOPOLI) {
                 if (recurs == null) {
-                    return cancelar(session, Missatges.CAL_RECURS_MONOPOLI);
+                    return cancelar(session, Missatges.CARTA_MONOPOLI_RECURS);
                 }
                 List<RecursJugador> altres = session.createQuery("select r from RecursJugador r where r.jugador.partida = :p and r.jugador <> :j and r.tipus = :t", RecursJugador.class).setParameter("p", p).setParameter("j", j).setParameter("t", recurs).getResultList();
-                
+
                 int total = 0;
                 for (int i = 0; i < altres.size(); i++) {
                     total += altres.get(i).getQuantitat();
@@ -529,7 +528,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
+    @Override
     public List<Vertex> vertexsDisponibles(int idJugador) {
         Session session = sessionFactory.getCurrentSession();
         try {
@@ -562,13 +561,10 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
     }
 
-
-
     private String cancelar(Session session, String missatge) {
         session.getTransaction().rollback();
         return Missatges.ERROR + missatge;
     }
-
 
     private String comprovarTorn(Jugador j, boolean comprovarDausILladre) {
         if (j == null) {
@@ -583,7 +579,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         }
         if (comprovarDausILladre && p.getEstat() == EstatPartida.EN_CURS) {
             if (!p.isDausTirats()) {
-                return Missatges.DAUS_NO_TIRATS;
+                return Missatges.CAL_TIRAR_DAUS;
             }
             if (p.isLladrePendent()) {
                 return Missatges.LLADRE_PENDENT;
@@ -616,7 +612,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         return session.createNamedQuery("RecursJugador.perJugadorITipus", RecursJugador.class).setParameter("jugador", j).setParameter("tipus", tipus).getSingleResult();
     }
 
-    private void afegirRecurs(Session session, Jugador j, TipusRecurs tipus, int quantitat) {
+    void afegirRecurs(Session session, Jugador j, TipusRecurs tipus, int quantitat) {
         RecursJugador r = recurs(session, j, tipus);
         r.setQuantitat(r.getQuantitat() + quantitat);
     }
@@ -673,7 +669,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         return triat;
     }
 
-    private TipusRecurs recursDelTerreny(TipusTerreny terreny) {
+    TipusRecurs recursDelTerreny(TipusTerreny terreny) {
         if (terreny == TipusTerreny.BOSC) {
             return TipusRecurs.FUSTA;
         } else if (terreny == TipusTerreny.TURONS) {
@@ -688,7 +684,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         return null;
     }
 
-    private int punts(Session session, Jugador j) {
+    int punts(Session session, Jugador j) {
         int poblats = numPoblats(session, j);
         int ciutats = numCiutats(session, j);
         int cartesPunt = session.createQuery("select count(c) from CartaDesenvolupament c where c.jugador = :j and c.tipus = :t", Long.class).setParameter("j", j).setParameter("t", TipusCarta.PUNT_VICTORIA).uniqueResult().intValue();
@@ -702,7 +698,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         return total;
     }
 
-    private Jugador exercitMesGran(Session session, Partida p) {
+    Jugador exercitMesGran(Session session, Partida p) {
         List<Jugador> jugadors = session.createQuery("select j from Jugador j where j.partida = :p order by j.cavallersJugats desc", Jugador.class).setParameter("p", p).getResultList();
         if (jugadors.isEmpty()) {
             return null;
@@ -717,8 +713,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> {
         return primer;
     }
 
-
-    private void comprovarVictoria(Session session, Partida p) {
+    void comprovarVictoria(Session session, Partida p) {
         if (p.getEstat() != EstatPartida.EN_CURS) {
             return;
         }

@@ -27,15 +27,15 @@ public class Aresta {
     @Column(name = "codi", nullable = false)
     private int codi;
 
-    @OneToOne(mappedBy = "aresta", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "aresta", fetch = FetchType.EAGER)
     private Carretera carretera;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "vertex_a", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "vertex_a", nullable = false)
     private Vertex vertexA;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "vertex_B", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "vertex_b", nullable = false)
     private Vertex vertexB;
 
     @ManyToOne
@@ -45,9 +45,8 @@ public class Aresta {
     public Aresta() {
     }
 
-    
-    public Aresta(Integer id, Vertex vertexA, Vertex vertexB) {
-        this.id = id;
+    public Aresta(int codi, Vertex vertexA, Vertex vertexB) {
+        this.codi = codi;
         this.vertexA = vertexA;
         this.vertexB = vertexB;
     }

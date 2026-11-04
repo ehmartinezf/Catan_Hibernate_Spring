@@ -10,24 +10,22 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "hexagon")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Hexagon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "codi", nullable = false, unique = true, length = 10)
+    @Column(name = "codi", nullable = false, length = 10)
     private int codi;
 
     @Enumerated(EnumType.STRING)
@@ -43,12 +41,12 @@ public class Hexagon {
     @Column(name = "r", nullable = false)
     private int r;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "partida_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    @OneToMany(mappedBy = "hexagon")
-    private Set<HexagonVertex> hexagonVertexes;
+    @OneToMany(mappedBy = "hexagon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HexagonVertex> hexagonVertexes = new HashSet<>();
 
     public Hexagon() {
     }

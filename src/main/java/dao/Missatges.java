@@ -18,6 +18,9 @@ public class Missatges {
     public static final String HEXAGON_NO_EXISTEIX = "L'hexàgon no existeix";
     public static final String CARTA_NO_EXISTEIX = "La carta no existeix";
     public static final String ALTRA_PARTIDA = "Aquest element pertany a una altra partida";
+    public static final String ERROR = "ERROR: ";
+    public static final String ERROR_INTERN = "ERROR intern: ";
+    public static final String CAL_DOS_TIPUS_RECURS = "Cal indicar els dos tipus de recurs";
 
     // ---- torn i fase ----
     public static final String PARTIDA_FINALITZADA = "La partida està finalitzada: no admet cap acció";

@@ -16,13 +16,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "partida")
-@Check(constraints = "ultima_tirada <= 2 AND ultima_tirada <= 12")
+@Check(constraints = "ultima_tirada = 0 OR (ultima_tirada >= 2 AND ultima_tirada <= 12)")
 public class Partida {
 
     @Id
@@ -48,32 +49,32 @@ public class Partida {
     @Column(name = "ultima_tirada")
     private int ultimaTirada;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jugador_actiu_id")
     private Jugador jugadorActiu;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guanyador_id")
     private Jugador guanyador;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hexagon_lladre_id")
     private Hexagon hexagonLladre;
 
-    @OneToMany(mappedBy = "partida")
+    @OneToMany(mappedBy = "partida", fetch = FetchType.LAZY)
     private Set<Jugador> jugadors = new HashSet<>();
 
-    @OneToMany(mappedBy = "partida")
+    @OneToMany(mappedBy = "partida", fetch = FetchType.LAZY)
     private Set<Hexagon> hexagons = new HashSet<>();
 
-    @OneToMany(mappedBy = "partida")
-    private Set<Vertex> vertexes;
+    @OneToMany(mappedBy = "partida", fetch = FetchType.LAZY)
+    private Set<Vertex> vertexes = new HashSet<>();
 
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Aresta> arestes;
+    private Set<Aresta> arestes = new HashSet<>();
 
     @OneToMany(mappedBy = "partida", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<CartaDesenvolupament> pila;
+    private Set<CartaDesenvolupament> pila = new HashSet<>();
 
     public Partida() {
         this.estat = EstatPartida.PREPARACIO;

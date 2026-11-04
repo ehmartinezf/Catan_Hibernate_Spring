@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "vertex")
@@ -31,10 +32,10 @@ public class Vertex {
     private Assentament assentament;
 
     @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<HexagonVertex> hexagonVertex;
+    private Set<HexagonVertex> hexagonVertex = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "partida_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
     public Vertex() {

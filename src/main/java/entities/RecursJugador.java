@@ -10,10 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-
+@NamedQuery(name = "RecursJugador.perJugador",
+        query = "SELECT r FROM RecursJugador r WHERE r.jugador = :jugador")
+@NamedQuery(name = "RecursJugador.perJugadorITipus",
+        query = "SELECT r FROM RecursJugador r WHERE r.jugador = :jugador AND r.tipusRecurs = :tipus")
 @Entity
 @Table(name = "recurs_jugador", uniqueConstraints = {
     @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"tipusRecurs", "jugador_id"})})
@@ -24,11 +28,11 @@ public class RecursJugador {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "jugador_id")
+    @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador jugador;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipusRecurs")
+    @Column(name = "tipusRecurs", nullable = false)
     private TipusRecurs tipusRecurs;
 
     @Column(name = "quantitat")
