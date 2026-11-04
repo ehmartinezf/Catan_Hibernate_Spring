@@ -29,6 +29,7 @@ import enums.TipusTerreny;
 import jakarta.persistence.EntityManager;
 import java.util.Random;
 import util.CsvLector;
+import enums.TipusRecurs;
 
 public class PartidaDao extends GenericDao<Partida, Integer> implements IPartidaDao {
 
@@ -66,36 +67,9 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             return -1;
         }
 
-        Partida partida = new Partida(puntsPerGuanyar);
-
-        Collections.shuffle(nomsJugadors);
-        List<Integer> torns = new ArrayList<>(nomsJugadors.size());
-        for (String nomJugador : nomsJugadors) {
-            int ordreTorn;
-            boolean tornRepetit = false;
-            do {
-                Random rand = new Random();
-                ordreTorn = rand.nextInt(1, nomsJugadors.size() + 1);
-                if (torns.contains(ordreTorn)) {
-                    tornRepetit = true;
-                } else {
-                    torns.add(ordreTorn);
-                }
-            } while (tornRepetit);
-            ColorJugador color = null;
-            switch (ordreTorn) {
-                case 1 ->
-                    color = ColorJugador.VERMELL;
-                case 2 ->
-                    color = ColorJugador.BLAU;
-                case 3 ->
-                    color = ColorJugador.BLANC;
-                case 4 ->
-                    color = ColorJugador.TARONJA;
-            }
-            partida.afegirJugador(new Jugador(nomJugador, color, ordreTorn, partida));
-        }
-        return -1;
+        Partida partida = crearPartida(session, nomsJugadors, puntsPerGuanyar);
+        creaTauler(session, partida);
+        return partida.getId();
     }
 
     public static Partida crearPartida(Session session, List<String> noms, int puntsPerGuanyar) {
@@ -232,14 +206,18 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
     }
 
     private String mostrarTauler(Session session, int idPartida) {
-        List<Hexagon> hexagons = session.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id = :idPartida", Hexagon.class).setParameter("idPartida", idPartida).getResultList();
+        List<Hexagon> hexagons = session.createQuery("from hexagon h JOIN FETCH h.partida_id, h.hexagonVertexes WHERE h.partida_id = :idPartida", Hexagon.class)
+                .setParameter("idPartida", idPartida)
+                .getResultList();
         String resultat = "";
 
         for (Hexagon hexagon : hexagons) {
             resultat += hexagon.toString() + "\n";
             for (HexagonVertex hv : hexagon.getHexagonVertexes()) {
                 Assentament assentament = hv.getVertex().getAssentament();
+                Jugador propietari = assentament.getPropietari();
                 resultat += assentament.toString() + "\n";
+                resultat += "PROPIETARI: " + propietari.toString() + "\n";
             }
         }
 
@@ -335,6 +313,57 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public String tirarDaus(int idPartida) {
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            String resultat = tirarDaus(session, idPartida);
+            session.getTransaction().commit();
+            return resultat;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RuntimeException("Error en mostrar el taulell", e);
+        }
+    }
+
+    private String tirarDaus(Session session, int idPartida) {
+        Partida partida = session.createQuery("from Partida where id = :idPartida", Partida.class)
+                .setParameter("idPartida", idPartida)
+                .getSingleResult();
+        if (partida == null) {
+            return Missatges.PARTIDA_NO_EXISTEIX;
+        }
+        if (partida.getEstat() == EstatPartida.FINALITZADA) {
+            return Missatges.PARTIDA_FINALITZADA;
+        }
+
+        if (partida.getEstat() != EstatPartida.EN_CURS) {
+            return Missatges.NOMES_EN_CURS;
+        }
+
+        if (partida.isDausTirats()) {
+            return Missatges.DAUS_JA_TIRATS;
+        }
+
+        Random rand = new Random();
+        int dau1 = rand.nextInt(6) + 1;
+        int dau2 = rand.nextInt(6) + 1;
+        int suma = dau1 + dau2;
+        partida.setUltimaTirada(suma);
+        partida.setDausTirats(true);
+
+        StringBuilder sb = new StringBuilder("Daus: " + dau1 + " + " + dau2 + " = " + suma + "\n");
+
+        if (suma == 7) {
+            sb.append("No hi ha producció.\n");
+        } else {
+            // FALTA
+        }
+        return sb.toString();
+
     }
 
 }

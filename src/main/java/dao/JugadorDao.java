@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.hibernate.Session;
-import util.Missatges;
 
 public class JugadorDao extends GenericDao<Jugador, Integer> {
 

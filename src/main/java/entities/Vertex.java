@@ -27,7 +27,7 @@ public class Vertex {
     @Column(name = "codi", nullable = false)
     private int codi;
 
-    @OneToOne(mappedBy = "vertex", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "vertex", fetch = FetchType.LAZY)
     private Assentament assentament;
 
     @OneToMany(mappedBy = "vertex", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

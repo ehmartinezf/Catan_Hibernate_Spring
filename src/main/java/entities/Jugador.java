@@ -152,4 +152,9 @@ public class Jugador {
     public void setConstruccions(Set<Construccio> construccions) {
         this.construccions = construccions;
     }
+
+    @Override
+    public String toString() {
+        return "Jugador{" + "id=" + id + ", nom=" + nom + ", color=" + color + ", ordreTorn=" + ordreTorn + ", partida=" + partida + ", recursos=" + recursos + ", cartesDesenvolupament=" + cartesDesenvolupament + ", construccions=" + construccions + ", cavallersJugats=" + cavallersJugats + '}';
+    }
 }
