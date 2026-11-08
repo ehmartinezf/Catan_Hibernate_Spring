@@ -1,6 +1,10 @@
 package entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import enums.ColorJugador;
+import enums.TipusRecurs;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,8 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "jugador")

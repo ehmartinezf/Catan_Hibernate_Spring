@@ -19,7 +19,9 @@ import enums.TipusTerreny;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugadorDao {
 
@@ -28,38 +30,66 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
     private static final int MAX_CIUTATS = 4;
     private static final Random RANDOM = new Random();
 
+    /**
+     * Executa 'accio' dins d'una transaccio.
+     * - Si NO n'hi ha cap d'activa: l'obre, fa commit al final i rollback si hi ha error.
+     * - Si JA n'hi ha una d'activa (cridat des d'un altre DAO): s'hi uneix, no fa
+     *   begin/commit/rollback i rellança l'excepcio perque la gestioni qui l'ha oberta.
+     */
+    private <T> T transaccio(Function<Session, T> accio, Function<RuntimeException, T> enError) {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction tx = session.getTransaction();
+        boolean propia = !tx.isActive();
+        if (propia) {
+            tx.begin();
+        }
+        try {
+            T resultat = accio.apply(session);
+            if (propia && tx.isActive()) {
+                tx.commit();
+            }
+            return resultat;
+        } catch (RuntimeException e) {
+            if (!propia) {
+                throw e;
+            }
+            try {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+            } catch (RuntimeException ignorada) {
+                // el rollback no ha de tapar l'error original
+            }
+            e.printStackTrace();
+            return enError.apply(e);
+        }
+    }
+
+    private Function<RuntimeException, String> errorIntern() {
+        return e -> Missatges.ERROR_INTERN + e.getMessage();
+    }
+
     @Override
     public void mostrarRecursos(int idJugador) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
-
             if (j == null) {
                 System.out.println(Missatges.JUGADOR_NO_EXISTEIX);
-                session.getTransaction().rollback();
-                return;
+                return null;
             }
-
             System.out.println("Recursos de " + j.getNom() + ":");
             List<RecursJugador> recursos = session.createNamedQuery("RecursJugador.perJugador", RecursJugador.class).setParameter("jugador", j).getResultList();
-
             for (int i = 0; i < recursos.size(); i++) {
                 RecursJugador r = recursos.get(i);
                 System.out.println("  " + r.getTipusRecurs() + ": " + r.getQuantitat());
             }
-            session.getTransaction().commit();
-
-        } catch (RuntimeException e) {
-            handleException(session, e);
-        }
+            return null;
+        }, e -> null);
     }
 
     @Override
     public String construirCarretera(int idJugador, int idAresta) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -121,19 +151,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             c.setPropietari(j);
             c.setAresta(a);
             session.persist(c);
-            session.getTransaction().commit();
             return "Carretera construida";
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String construirPoblat(int idJugador, int idVertex) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -200,20 +224,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             }
 
             comprovarVictoria(session, p);
-            session.getTransaction().commit();
             return missatge;
-
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String millorarACiutat(int idJugador, int idVertex) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -251,20 +268,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             session.persist(ciutat);
 
             comprovarVictoria(session, p);
-            session.getTransaction().commit();
             return "Poblat millorat a ciutat";
-
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String comerciarBanca(int idJugador, TipusRecurs dona, TipusRecurs rep) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -286,37 +296,21 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             }
             rDona.setQuantitat(rDona.getQuantitat() - 4);
             afegirRecurs(session, j, rep, 1);
-            session.getTransaction().commit();
             return "Comerç fet: 4 " + dona + " per 1 " + rep;
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public int calcularPunts(int idJugador) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
-            int punts = 0;
-            if (j != null) {
-                punts = punts(session, j);
-            }
-            session.getTransaction().commit();
-            return punts;
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return 0;
-        }
+            return j == null ? 0 : calcularPunts(session, j);
+        }, e -> 0);
     }
 
     @Override
     public String passarTorn(int idJugador) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -357,19 +351,14 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             }
             p.setDausTirats(false);
 
-            session.getTransaction().commit();
+            // el missatge es construeix abans del commit, mentre la sessio encara existeix
             return "Torn passat. Ara juga " + p.getJugadorActiu().getNom();
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String moureLladre(int idJugador, int idHexagon, Integer idJugadorVictima) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, false);
             if (error != null) {
@@ -419,21 +408,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
 
             p.setHexagonLladre(h);
             p.setLladrePendent(false);
-
-            session.getTransaction().commit();
             return missatge;
-
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String comprarCarta(int idJugador) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -460,19 +441,13 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             carta.setRondaCompra(p.getRonda());
 
             comprovarVictoria(session, p);
-            session.getTransaction().commit();
             return "Has comprat una carta: " + carta.getTipus();
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public String jugarCarta(int idJugador, int idCarta, TipusRecurs recurs) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             String error = comprovarTorn(j, true);
             if (error != null) {
@@ -504,7 +479,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
                 if (recurs == null) {
                     return cancelar(session, Missatges.CARTA_MONOPOLI_RECURS);
                 }
-                List<RecursJugador> altres = session.createQuery("select r from RecursJugador r where r.jugador.partida = :p and r.jugador <> :j and r.tipus = :t", RecursJugador.class).setParameter("p", p).setParameter("j", j).setParameter("t", recurs).getResultList();
+                List<RecursJugador> altres = session.createQuery("select r from RecursJugador r where r.jugador.partida = :p and r.jugador <> :j and r.tipusRecurs = :t", RecursJugador.class).setParameter("p", p).setParameter("j", j).setParameter("t", recurs).getResultList();
 
                 int total = 0;
                 for (int i = 0; i < altres.size(); i++) {
@@ -520,49 +495,70 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
 
             carta.setUsada(true);
             comprovarVictoria(session, p);
-            session.getTransaction().commit();
             return missatge;
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return Missatges.ERROR_INTERN + e.getMessage();
-        }
+        }, errorIntern());
     }
 
     @Override
     public List<Vertex> vertexsDisponibles(int idJugador) {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
+        return transaccio(session -> {
             Jugador j = session.get(Jugador.class, idJugador);
             if (j == null) {
-                session.getTransaction().rollback();
-                return new ArrayList<>();
+                return new ArrayList<Vertex>();
             }
             Partida p = j.getPartida();
             boolean preparacio = p.getEstat() == EstatPartida.PREPARACIO;
 
             String hql = "select v from Vertex v where v.partida = :p and not exists (select a from Assentament a where a.vertex = v) and not exists (select a2 from Assentament a2, Aresta ar where (ar.vertexA = v and a2.vertex = ar.vertexB) or (ar.vertexB = v and a2.vertex = ar.vertexA)) ";
 
-            List<Vertex> vertexs;
             if (preparacio) {
                 hql += "order by v.codi";
-                vertexs = session.createQuery(hql, Vertex.class).setParameter("p", p).getResultList();
-            } else {
-                hql += "and exists (select c from Carretera c where c.propietari = :j and (c.aresta.vertexA = v or c.aresta.vertexB = v)) order by v.codi";
-                vertexs = session.createQuery(hql, Vertex.class).setParameter("p", p).setParameter("j", j).getResultList();
+                return session.createQuery(hql, Vertex.class).setParameter("p", p).getResultList();
             }
-
-            session.getTransaction().commit();
-            return vertexs;
-
-        } catch (RuntimeException e) {
-            handleException(session, e);
-            return new ArrayList<>();
-        }
+            hql += "and exists (select c from Carretera c where c.propietari = :j and (c.aresta.vertexA = v or c.aresta.vertexB = v)) order by v.codi";
+            return session.createQuery(hql, Vertex.class).setParameter("p", p).setParameter("j", j).getResultList();
+        }, e -> new ArrayList<Vertex>());
     }
 
+    /**
+     * Afegeix (o resta) recursos amb la seva propia transaccio, o unint-se a la que hi hagi activa.
+     */
+    public void afegirRecurs(Jugador j, TipusRecurs tipus, int quantitat) {
+        transaccio(session -> {
+            afegirRecurs(session, j, tipus, quantitat);
+            return null;
+        }, e -> null);
+    }
+
+    public TipusRecurs recursDelTerreny(TipusTerreny terreny) {
+        if (terreny == TipusTerreny.BOSC) {
+            return TipusRecurs.FUSTA;
+        } else if (terreny == TipusTerreny.TURONS) {
+            return TipusRecurs.MAO;
+        } else if (terreny == TipusTerreny.PASTURES) {
+            return TipusRecurs.LLANA;
+        } else if (terreny == TipusTerreny.CAMPS) {
+            return TipusRecurs.BLAT;
+        } else if (terreny == TipusTerreny.MUNTANYES) {
+            return TipusRecurs.MINERAL;
+        }
+        return null;
+    }
+
+    public Jugador exercitMesGran(int idPartida) {
+        return transaccio(session -> {
+            Partida p = session.find(Partida.class, idPartida);
+            return exercitMesGran(session, p);
+        }, e -> null);
+    }
+
+    // ------------------------------------------------------------------
+    // Metodes interns: reben la Session i MAI toquen la transaccio
+    // ------------------------------------------------------------------
+
     private String cancelar(Session session, String missatge) {
-        session.getTransaction().rollback();
+        // No es fa rollback aqui: les validacions s'executen abans de modificar res,
+        // i el rollback ja es gestiona a transaccio() quan hi ha una excepcio.
         return Missatges.ERROR + missatge;
     }
 
@@ -612,7 +608,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
         return session.createNamedQuery("RecursJugador.perJugadorITipus", RecursJugador.class).setParameter("jugador", j).setParameter("tipus", tipus).getSingleResult();
     }
 
-    void afegirRecurs(Session session, Jugador j, TipusRecurs tipus, int quantitat) {
+    private void afegirRecurs(Session session, Jugador j, TipusRecurs tipus, int quantitat) {
         RecursJugador r = recurs(session, j, tipus);
         r.setQuantitat(r.getQuantitat() + quantitat);
     }
@@ -669,36 +665,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
         return triat;
     }
 
-    TipusRecurs recursDelTerreny(TipusTerreny terreny) {
-        if (terreny == TipusTerreny.BOSC) {
-            return TipusRecurs.FUSTA;
-        } else if (terreny == TipusTerreny.TURONS) {
-            return TipusRecurs.MAO;
-        } else if (terreny == TipusTerreny.PASTURES) {
-            return TipusRecurs.LLANA;
-        } else if (terreny == TipusTerreny.CAMPS) {
-            return TipusRecurs.BLAT;
-        } else if (terreny == TipusTerreny.MUNTANYES) {
-            return TipusRecurs.MINERAL;
-        }
-        return null;
-    }
-
-    int punts(Session session, Jugador j) {
-        int poblats = numPoblats(session, j);
-        int ciutats = numCiutats(session, j);
-        int cartesPunt = session.createQuery("select count(c) from CartaDesenvolupament c where c.jugador = :j and c.tipus = :t", Long.class).setParameter("j", j).setParameter("t", TipusCarta.PUNT_VICTORIA).uniqueResult().intValue();
-
-        int total = poblats + 2 * ciutats + cartesPunt;
-
-        Jugador exercit = exercitMesGran(session, j.getPartida());
-        if (exercit != null && exercit.getId() == j.getId()) {
-            total += 2;
-        }
-        return total;
-    }
-
-    Jugador exercitMesGran(Session session, Partida p) {
+    private Jugador exercitMesGran(Session session, Partida p) {
         List<Jugador> jugadors = session.createQuery("select j from Jugador j where j.partida = :p order by j.cavallersJugats desc", Jugador.class).setParameter("p", p).getResultList();
         if (jugadors.isEmpty()) {
             return null;
@@ -713,7 +680,22 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
         return primer;
     }
 
-    void comprovarVictoria(Session session, Partida p) {
+    /** Package-private: la crida PartidaDao des de la seva propia sessio/transaccio. */
+    int calcularPunts(Session session, Jugador j) {
+        int poblats = numPoblats(session, j);
+        int ciutats = numCiutats(session, j);
+        int cartesPunt = session.createQuery("select count(c) from CartaDesenvolupament c where c.jugador = :j and c.tipus = :t", Long.class).setParameter("j", j).setParameter("t", TipusCarta.PUNT_VICTORIA).uniqueResult().intValue();
+
+        int total = poblats + 2 * ciutats + cartesPunt;
+
+        Jugador exercit = exercitMesGran(session, j.getPartida());
+        if (exercit != null && exercit.getId() == j.getId()) {
+            total += 2;
+        }
+        return total;
+    }
+
+    private void comprovarVictoria(Session session, Partida p) {
         if (p.getEstat() != EstatPartida.EN_CURS) {
             return;
         }
@@ -721,7 +703,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
 
         for (int i = 0; i < jugadors.size(); i++) {
             Jugador j = jugadors.get(i);
-            if (punts(session, j) >= p.getPuntsPerGuanyar()) {
+            if (calcularPunts(session, j) >= p.getPuntsPerGuanyar()) {
                 p.setEstat(EstatPartida.FINALITZADA);
                 p.setGuanyador(j);
                 return;

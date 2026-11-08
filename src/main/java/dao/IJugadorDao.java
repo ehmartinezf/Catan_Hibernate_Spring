@@ -28,4 +28,5 @@ public interface IJugadorDao extends IGenericDao<Jugador, Integer> {
     String jugarCarta(int idJugador, int idCarta, TipusRecurs recurs);
 
     List<Vertex> vertexsDisponibles(int idJugador);
+    
 }

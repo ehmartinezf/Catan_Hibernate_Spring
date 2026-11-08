@@ -248,7 +248,15 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         if (partida == null) {
             throw new IllegalArgumentException(Missatges.PARTIDA_NO_EXISTEIX);
         }
-        new JugadorDao().comprovarVictoria(session, partida);
+        
+        JugadorDao jd = new JugadorDao();
+        for(Jugador j : partida.getJugadors()) {
+        	int punts = jd.calcularPunts(j.getId());
+        	if(punts >= partida.getPuntsPerGuanyar()) {
+        		partida.setEstat(EstatPartida.FINALITZADA);
+        		partida.setGuanyador(j);
+        	}
+        }
 
     }
 
@@ -284,7 +292,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             sb.append("\n-----------------------------\n");
             sb.append("NOM: ").append(jugador.getNom()).append("\n");
             sb.append("PUNTS DE VICTORIA: ")
-                    .append(new JugadorDao().punts(session, jugador)).append("\n");
+                    .append(new JugadorDao().calcularPunts(session,jugador)).append("\n");
 
             Set<Construccio> construccionsJugador = jugador.getConstruccions();
 
@@ -360,6 +368,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         StringBuilder sb = new StringBuilder("Daus: " + dau1 + " + " + dau2 + " = " + suma + "\n");
 
         if (suma == 7) {
+            partida.setLladrePendent(true);
             sb.append("No hi ha producció.\n");
         } else {
             JugadorDao jd = new JugadorDao();
@@ -379,7 +388,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
                         .getResultList();
                 for (Assentament a : assentaments) {
                     int quantitat = (a instanceof Ciutat) ? 2 : 1;
-                    jd.afegirRecurs(session, a.getPropietari(), tipus, quantitat);
+                    jd.afegirRecurs(a.getPropietari(), tipus, quantitat);
                     sb.append(a.getPropietari().getNom()).append(" rep ").append(quantitat).append(" ").append(tipus).append("\n");
                 }
             }
@@ -387,5 +396,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         return sb.toString();
 
     }
+    
 
 }
