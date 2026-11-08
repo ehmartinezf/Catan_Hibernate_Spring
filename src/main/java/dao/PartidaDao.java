@@ -79,16 +79,15 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
 
     public static Partida crearPartida(Session session, List<String> noms, int puntsPerGuanyar) {
         Partida partida = new Partida(puntsPerGuanyar);
-        session.persist(partida); // IDENTITY: l'INSERT es fa ja, i la partida ja té id
+        session.persist(partida);
         creaTauler(session, partida);
         List<Jugador> jugadors = creaJugadors(session, partida, noms);
         creaPila(session, partida);
-        partida.setJugadorActiu(jugadors.get(0)); // el jugador d'ordreTorn 1 comença
+        partida.setJugadorActiu(jugadors.get(0));
         return partida;
     }
 
     private static void creaTauler(EntityManager em, Partida partida) {
-        // 1) Entitats SENSE dependències: vèrtexs (primer, perquè les arestes i els hexàgons hi apunten)
         Map<Integer, Vertex> vertexs = new LinkedHashMap<>();
         for (String[] fila : CsvLector.llegir("vertexs.csv")) {
             int codi = Integer.parseInt(fila[0]);
@@ -98,7 +97,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             vertexs.put(codi, v);
         }
 
-        // 2) Arestes: cada una uneix dos vèrtexs que ja existeixen
         for (String[] fila : CsvLector.llegir("arestes.csv")) {
             Aresta a = new Aresta(Integer.parseInt(fila[0]),
                     obtenir(vertexs, Integer.parseInt(fila[1]), "arestes.csv"),
@@ -107,7 +105,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             em.persist(a);
         }
 
-        // 3) Hexàgons: terrenys i números aleatoris (19 terrenys, 18 números: el desert no en té)
         List<TipusTerreny> terrenys = new ArrayList<>();
         afegir(terrenys, TipusTerreny.BOSC, 4);
         afegir(terrenys, TipusTerreny.PASTURES, 4);
@@ -132,7 +129,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             hexagons.put(h.getCodi(), h);
         }
 
-        // 4) Relació hexàgon-vèrtex (hexagon_vertex.csv): els sis vèrtexs de cada hexàgon amb la seva posició
         for (String[] fila : CsvLector.llegir("hexagon_vertex.csv")) {
             Hexagon h = obtenir(hexagons, Integer.parseInt(fila[0]), "hexagon_vertex.csv");
             Vertex v = obtenir(vertexs, Integer.parseInt(fila[1]), "hexagon_vertex.csv");
@@ -140,24 +136,22 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
             h.afegirHexagonVertex(hv);
         }
 
-        // 5) persist dels hexàgons: el cascade ALL desa també els seus HexagonVertex (els vèrtexs ja existeixen)
         for (Hexagon h : hexagons.values()) {
             em.persist(h);
             if (h.getTerreny() == TipusTerreny.DESERT) {
-                partida.setHexagonLladre(h); // el lladre comença al desert
+                partida.setHexagonLladre(h);
             }
         }
     }
 
     private static List<Jugador> creaJugadors(EntityManager em, Partida partida, List<String> noms) {
         List<String> ordre = new ArrayList<>(noms);
-        Collections.shuffle(ordre); // l'ordre de torn és aleatori
+        Collections.shuffle(ordre);
         List<Jugador> jugadors = new ArrayList<>();
         for (int i = 0; i < ordre.size(); i++) {
-            // el color s'assigna segons l'ordre de torn; el constructor crea els 5 RecursJugador a 0
             Jugador j = new Jugador(ordre.get(i).trim(), ColorJugador.values()[i], i + 1, partida);
             partida.afegirJugador(j);
-            em.persist(j); // cascade ALL: també es desa l'inventari
+            em.persist(j);
             jugadors.add(j);
         }
         return jugadors;
@@ -186,7 +180,6 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
         }
     }
 
-    // Si un CSV apunta a un codi que no existeix, diem QUIN fitxer i QUIN valor (en lloc d'un NullPointerException)
     private static <T> T obtenir(Map<Integer, T> mapa, int codi, String fitxer) {
         T valor = mapa.get(codi);
         if (valor == null) {
@@ -379,7 +372,7 @@ public class PartidaDao extends GenericDao<Partida, Integer> implements IPartida
                     .getResultList();
             for (Hexagon h : hexagons) {
                 if (partida.getHexagonLladre() != null && partida.getHexagonLladre().getId().equals(h.getId())) {
-                    continue; // l'hexàgon amb el lladre no produeix
+                    continue;
                 }
                 TipusRecurs tipus = jd.recursDelTerreny(h.getTerreny());
                 List<Assentament> assentaments = session.createQuery(

@@ -15,7 +15,6 @@ public class CsvLector {
     private CsvLector() {
     }
 
-    // Llegeix un CSV del classpath (src/main/resources/dades) i torna les files sense la capçalera
     public static List<String[]> llegir(String nomFitxer) {
         InputStream is = CsvLector.class.getClassLoader().getResourceAsStream(CARPETA + nomFitxer);
         if (is == null) {
@@ -23,11 +22,11 @@ public class CsvLector {
         }
         List<String[]> files = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            br.readLine(); // capçalera: la saltem
+            br.readLine();
             String linia;
             while ((linia = br.readLine()) != null) {
                 if (!linia.isBlank()) {
-                    String[] camps = linia.split(",", -1); // -1: no elimina els camps buits del final
+                    String[] camps = linia.split(",", -1);
                     for (int i = 0; i < camps.length; i++) {
                         camps[i] = camps[i].trim();
                     }

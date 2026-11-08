@@ -30,12 +30,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
     private static final int MAX_CIUTATS = 4;
     private static final Random RANDOM = new Random();
 
-    /**
-     * Executa 'accio' dins d'una transaccio.
-     * - Si NO n'hi ha cap d'activa: l'obre, fa commit al final i rollback si hi ha error.
-     * - Si JA n'hi ha una d'activa (cridat des d'un altre DAO): s'hi uneix, no fa
-     *   begin/commit/rollback i rellança l'excepcio perque la gestioni qui l'ha oberta.
-     */
     private <T> T transaccio(Function<Session, T> accio, Function<RuntimeException, T> enError) {
         Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.getTransaction();
@@ -58,7 +52,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
                     tx.rollback();
                 }
             } catch (RuntimeException ignorada) {
-                // el rollback no ha de tapar l'error original
             }
             e.printStackTrace();
             return enError.apply(e);
@@ -351,7 +344,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
             }
             p.setDausTirats(false);
 
-            // el missatge es construeix abans del commit, mentre la sessio encara existeix
             return "Torn passat. Ara juga " + p.getJugadorActiu().getNom();
         }, errorIntern());
     }
@@ -520,9 +512,6 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
         }, e -> new ArrayList<Vertex>());
     }
 
-    /**
-     * Afegeix (o resta) recursos amb la seva propia transaccio, o unint-se a la que hi hagi activa.
-     */
     public void afegirRecurs(Jugador j, TipusRecurs tipus, int quantitat) {
         transaccio(session -> {
             afegirRecurs(session, j, tipus, quantitat);
@@ -552,13 +541,7 @@ public class JugadorDao extends GenericDao<Jugador, Integer> implements IJugador
         }, e -> null);
     }
 
-    // ------------------------------------------------------------------
-    // Metodes interns: reben la Session i MAI toquen la transaccio
-    // ------------------------------------------------------------------
-
     private String cancelar(Session session, String missatge) {
-        // No es fa rollback aqui: les validacions s'executen abans de modificar res,
-        // i el rollback ja es gestiona a transaccio() quan hi ha una excepcio.
         return Missatges.ERROR + missatge;
     }
 
