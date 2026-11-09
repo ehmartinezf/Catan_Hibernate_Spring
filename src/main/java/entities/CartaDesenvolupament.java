@@ -1,6 +1,7 @@
 package entities;
 
 import enums.TipusCarta;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,8 +39,7 @@ public class CartaDesenvolupament {
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
-    public CartaDesenvolupament() {
-    }
+    public CartaDesenvolupament() {}
 
     public CartaDesenvolupament(TipusCarta tipus) {
         this.tipus = tipus;
@@ -108,5 +108,4 @@ public class CartaDesenvolupament {
         }
         return getId() != null && getId().equals(other.getId());
     }
-
 }

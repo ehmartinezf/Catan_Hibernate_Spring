@@ -1,10 +1,7 @@
 package entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import enums.ColorJugador;
-import enums.TipusRecurs;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +15,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "jugador")
@@ -41,7 +41,11 @@ public class Jugador {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "jugador",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     private Set<RecursJugador> recursos = new HashSet<>();
 
     @OneToMany(mappedBy = "jugador")
@@ -53,8 +57,7 @@ public class Jugador {
     @Column(name = "cavallers_jugats")
     private int cavallersJugats;
 
-    public Jugador() {
-    }
+    public Jugador() {}
 
     public Jugador(String nom, ColorJugador color, int ordreTorn, Partida partida) {
         this.nom = nom;
@@ -162,7 +165,14 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return "Jugador{id=" + id + ", nom=" + nom + ", color=" + color + ", ordreTorn=" + ordreTorn + "}";
+        return "Jugador{id="
+                + id
+                + ", nom="
+                + nom
+                + ", color="
+                + color
+                + ", ordreTorn="
+                + ordreTorn
+                + "}";
     }
-
 }

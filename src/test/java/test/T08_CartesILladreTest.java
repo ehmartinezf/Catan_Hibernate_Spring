@@ -1,17 +1,21 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import enums.TipusCarta;
 import enums.TipusRecurs;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-class CartesILladreTest extends BaseDbTest {
+/*
+ * PRIORITAT 8: part avançada. Cartes de desenvolupament (comprar/jugar) i lladre (moure i robar).
+ * Escenari: partida EN_CURS a la ronda 2, daus tirats; "a" és l'actiu i "b" el rival.
+ * Les cartes de la mà tenen rondaCompra = 1, així que ja es poden jugar.
+ */
+class T08_CartesILladreTest extends BaseDbTest {
 
     private int partida;
     private int a;
@@ -24,6 +28,7 @@ class CartesILladreTest extends BaseDbTest {
         Joc.enCurs(partida, a, 2, true);
     }
 
+    // =============================== comprar carta ===============================
     @Test
     @DisplayName("Comprar una carta costa 1 llana + 1 blat + 1 mineral i la carta passa al jugador")
     void comprarCarta() {
@@ -40,7 +45,13 @@ class CartesILladreTest extends BaseDbTest {
         assertEquals(0, Joc.recurs(a, TipusRecurs.LLANA));
         assertEquals(0, Joc.recurs(a, TipusRecurs.BLAT));
         assertEquals(0, Joc.recurs(a, TipusRecurs.MINERAL));
-        assertEquals(2, Joc.un(Integer.class, "select c.rondaCompra from CartaDesenvolupament c where c.jugador.id = :j", "j", a),
+        assertEquals(
+                2,
+                Joc.un(
+                        Integer.class,
+                        "select c.rondaCompra from CartaDesenvolupament c where c.jugador.id = :j",
+                        "j",
+                        a),
                 "La carta guarda la ronda en què s'ha comprat");
     }
 
@@ -68,6 +79,7 @@ class CartesILladreTest extends BaseDbTest {
         assertEquals(25, Joc.total(a));
     }
 
+    // =============================== jugar carta ===============================
     @Test
     @DisplayName("No es pot jugar una carta que no és a la teva mà (d'un altre o inexistent)")
     void cartaNoEsTeva() {
@@ -133,7 +145,9 @@ class CartesILladreTest extends BaseDbTest {
     }
 
     @Test
-    @DisplayName("[POSSIBLE BUG] Monopoli: el jugador rep tots els recursos d'aquell tipus dels altres jugadors")
+    @DisplayName(
+            "[POSSIBLE BUG] Monopoli: el jugador rep tots els recursos d'aquell tipus dels altres"
+                    + " jugadors")
     void monopoli() {
         escenari();
         int carta = Joc.donarCarta(a, TipusCarta.MONOPOLI, 1);
@@ -142,13 +156,17 @@ class CartesILladreTest extends BaseDbTest {
 
         String r = jugadorDao.jugarCarta(a, carta, TipusRecurs.FUSTA);
 
+        // Ara mateix la consulta HQL de JugadorDao fa servir "r.tipus" i el camp es diu
+        // "tipusRecurs": torna "ERROR intern: ..."
         assertEquals("Monopoli: has rebut 3 FUSTA", r);
         assertEquals(4, Joc.recurs(a, TipusRecurs.FUSTA));
         assertEquals(0, Joc.recurs(b, TipusRecurs.FUSTA));
-        assertEquals(2, Joc.recurs(b, TipusRecurs.MAO), "Els altres recursos del rival no es toquen");
+        assertEquals(
+                2, Joc.recurs(b, TipusRecurs.MAO), "Els altres recursos del rival no es toquen");
         assertTrue(Joc.usada(carta));
     }
 
+    // =============================== moure el lladre ===============================
     private int hexagonDestinacio() {
         Joc.setLladrePendent(partida, true);
         return Joc.hexagonDiferentDelLladre(partida);
@@ -172,7 +190,9 @@ class CartesILladreTest extends BaseDbTest {
     void lladreNoPendent() {
         escenari();
 
-        Joc.ko(jugadorDao.moureLladre(a, Joc.hexagonDiferentDelLladre(partida), null), Missatges.LLADRE_NO_PENDENT);
+        Joc.ko(
+                jugadorDao.moureLladre(a, Joc.hexagonDiferentDelLladre(partida), null),
+                Missatges.LLADRE_NO_PENDENT);
     }
 
     @Test
@@ -181,7 +201,9 @@ class CartesILladreTest extends BaseDbTest {
         escenari();
         hexagonDestinacio();
 
-        Joc.ko(jugadorDao.moureLladre(a, Joc.idLladre(partida), null), Missatges.LLADRE_MATEIX_HEXAGON);
+        Joc.ko(
+                jugadorDao.moureLladre(a, Joc.idLladre(partida), null),
+                Missatges.LLADRE_MATEIX_HEXAGON);
         assertTrue(Joc.lladrePendent(partida));
     }
 
@@ -248,7 +270,11 @@ class CartesILladreTest extends BaseDbTest {
         escenari();
         int destinacio = hexagonDestinacio();
         Joc.setRecursos(b, 5, 5, 5, 5, 5);
+
+        // b no té cap assentament a l'hexàgon de destinació
         Joc.ko(jugadorDao.moureLladre(a, destinacio, b), Missatges.VICTIMA_INVALIDA);
+
+        // a es posa ell mateix com a víctima
         Joc.poblat(a, Joc.vertexsDeHexagon(destinacio).get(0));
         Joc.setRecursos(a, 5, 5, 5, 5, 5);
         Joc.ko(jugadorDao.moureLladre(a, destinacio, a), Missatges.VICTIMA_INVALIDA);

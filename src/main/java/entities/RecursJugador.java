@@ -1,6 +1,7 @@
 package entities;
 
 import enums.TipusRecurs;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,13 +15,22 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-@NamedQuery(name = "RecursJugador.perJugador",
+@NamedQuery(
+        name = "RecursJugador.perJugador",
         query = "SELECT r FROM RecursJugador r WHERE r.jugador = :jugador")
-@NamedQuery(name = "RecursJugador.perJugadorITipus",
-        query = "SELECT r FROM RecursJugador r WHERE r.jugador = :jugador AND r.tipusRecurs = :tipus")
+@NamedQuery(
+        name = "RecursJugador.perJugadorITipus",
+        query =
+                "SELECT r FROM RecursJugador r WHERE r.jugador = :jugador AND r.tipusRecurs ="
+                        + " :tipus")
 @Entity
-@Table(name = "recurs_jugador", uniqueConstraints = {
-    @UniqueConstraint(name = "uk_id_jugador_id", columnNames = {"tipusRecurs", "jugador_id"})})
+@Table(
+        name = "recurs_jugador",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                    name = "uk_id_jugador_id",
+                    columnNames = {"tipusRecurs", "jugador_id"})
+        })
 public class RecursJugador {
 
     @Id

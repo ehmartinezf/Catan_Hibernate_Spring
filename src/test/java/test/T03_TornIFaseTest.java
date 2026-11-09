@@ -1,26 +1,31 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import enums.EstatPartida;
+import enums.TipusRecurs;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import enums.EstatPartida;
-import enums.TipusRecurs;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-
-class TornIFaseTest extends BaseDbTest {
+/*
+ * PRIORITAT 3: control de torns i fases a EN_CURS.
+ * Totes les accions han de comprovar: partida no finalitzada -> és el teu torn -> daus tirats -> lladre no pendent.
+ * (Els ids 1 que es passen a les accions són irrellevants: el torn es valida ABANS de mirar l'objecte.)
+ */
+class T03_TornIFaseTest extends BaseDbTest {
 
     private int partida;
     private int actiu;
     private int altre;
 
+    /** Partida de 2 jugadors EN_CURS, ronda 1, daus SENSE tirar. */
     private void escenari(boolean dausTirats) {
         partida = Joc.nova2(partidaDao);
         actiu = Joc.jugadors(partida).get(0);
@@ -28,7 +33,7 @@ class TornIFaseTest extends BaseDbTest {
         Joc.enCurs(partida, actiu, 1, dausTirats);
     }
 
-
+    // --------------------------------- tirar daus ---------------------------------
     @Test
     @DisplayName("Sense tirar els daus no es pot fer cap acció del torn")
     void senseTirarDaus() {
@@ -37,7 +42,9 @@ class TornIFaseTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(actiu, 1), Missatges.CAL_TIRAR_DAUS);
         Joc.ko(jugadorDao.construirPoblat(actiu, 1), Missatges.CAL_TIRAR_DAUS);
         Joc.ko(jugadorDao.millorarACiutat(actiu, 1), Missatges.CAL_TIRAR_DAUS);
-        Joc.ko(jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.CAL_TIRAR_DAUS);
+        Joc.ko(
+                jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.CAL_TIRAR_DAUS);
         Joc.ko(jugadorDao.comprarCarta(actiu), Missatges.CAL_TIRAR_DAUS);
         Joc.ko(jugadorDao.jugarCarta(actiu, 1, null), Missatges.CAL_TIRAR_DAUS);
         Joc.ko(jugadorDao.passarTorn(actiu), Missatges.CAL_TIRAR_DAUS);
@@ -70,6 +77,7 @@ class TornIFaseTest extends BaseDbTest {
         assertEquals(Missatges.PARTIDA_NO_EXISTEIX, partidaDao.tirarDaus(99999));
     }
 
+    // --------------------------------- és el teu torn ---------------------------------
     @Test
     @DisplayName("Un jugador que no és l'actiu no pot fer cap acció")
     void noEsElTeuTorn() {
@@ -78,7 +86,9 @@ class TornIFaseTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(altre, 1), Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.construirPoblat(altre, 1), Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.millorarACiutat(altre, 1), Missatges.NO_ES_EL_TEU_TORN);
-        Joc.ko(jugadorDao.comerciarBanca(altre, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.NO_ES_EL_TEU_TORN);
+        Joc.ko(
+                jugadorDao.comerciarBanca(altre, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.comprarCarta(altre), Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.jugarCarta(altre, 1, null), Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.moureLladre(altre, 1, null), Missatges.NO_ES_EL_TEU_TORN);
@@ -94,7 +104,9 @@ class TornIFaseTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(99999, 1), Missatges.JUGADOR_NO_EXISTEIX);
         Joc.ko(jugadorDao.construirPoblat(99999, 1), Missatges.JUGADOR_NO_EXISTEIX);
         Joc.ko(jugadorDao.millorarACiutat(99999, 1), Missatges.JUGADOR_NO_EXISTEIX);
-        Joc.ko(jugadorDao.comerciarBanca(99999, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.JUGADOR_NO_EXISTEIX);
+        Joc.ko(
+                jugadorDao.comerciarBanca(99999, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.JUGADOR_NO_EXISTEIX);
         Joc.ko(jugadorDao.comprarCarta(99999), Missatges.JUGADOR_NO_EXISTEIX);
         Joc.ko(jugadorDao.jugarCarta(99999, 1, null), Missatges.JUGADOR_NO_EXISTEIX);
         Joc.ko(jugadorDao.moureLladre(99999, 1, null), Missatges.JUGADOR_NO_EXISTEIX);
@@ -103,8 +115,11 @@ class TornIFaseTest extends BaseDbTest {
         assertTrue(jugadorDao.vertexsDisponibles(99999).isEmpty());
     }
 
+    // --------------------------------- passar torn ---------------------------------
     @Test
-    @DisplayName("Passar torn: canvia el jugador actiu, es poden tornar a tirar els daus i la ronda no canvia")
+    @DisplayName(
+            "Passar torn: canvia el jugador actiu, es poden tornar a tirar els daus i la ronda no"
+                    + " canvia")
     void passarTorn() {
         escenari(true);
 
@@ -147,8 +162,10 @@ class TornIFaseTest extends BaseDbTest {
         }
     }
 
+    // --------------------------------- lladre pendent ---------------------------------
     @Test
-    @DisplayName("Amb el lladre pendent cal moure'l abans de fer qualsevol altra cosa (ni passar torn)")
+    @DisplayName(
+            "Amb el lladre pendent cal moure'l abans de fer qualsevol altra cosa (ni passar torn)")
     void lladrePendentBloquejaLesAccions() {
         escenari(true);
         Joc.setLladrePendent(partida, true);
@@ -156,13 +173,16 @@ class TornIFaseTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(actiu, 1), Missatges.LLADRE_PENDENT);
         Joc.ko(jugadorDao.construirPoblat(actiu, 1), Missatges.LLADRE_PENDENT);
         Joc.ko(jugadorDao.millorarACiutat(actiu, 1), Missatges.LLADRE_PENDENT);
-        Joc.ko(jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.LLADRE_PENDENT);
+        Joc.ko(
+                jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.LLADRE_PENDENT);
         Joc.ko(jugadorDao.comprarCarta(actiu), Missatges.LLADRE_PENDENT);
         Joc.ko(jugadorDao.jugarCarta(actiu, 1, null), Missatges.LLADRE_PENDENT);
         Joc.ko(jugadorDao.passarTorn(actiu), Missatges.LLADRE_PENDENT);
         assertEquals(actiu, Joc.actiu(partida));
     }
 
+    // --------------------------------- partida finalitzada ---------------------------------
     @Test
     @DisplayName("Una partida FINALITZADA no admet cap acció")
     void partidaFinalitzada() {
@@ -172,7 +192,9 @@ class TornIFaseTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(actiu, 1), Missatges.PARTIDA_FINALITZADA);
         Joc.ko(jugadorDao.construirPoblat(actiu, 1), Missatges.PARTIDA_FINALITZADA);
         Joc.ko(jugadorDao.millorarACiutat(actiu, 1), Missatges.PARTIDA_FINALITZADA);
-        Joc.ko(jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.PARTIDA_FINALITZADA);
+        Joc.ko(
+                jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.PARTIDA_FINALITZADA);
         Joc.ko(jugadorDao.comprarCarta(actiu), Missatges.PARTIDA_FINALITZADA);
         Joc.ko(jugadorDao.jugarCarta(actiu, 1, null), Missatges.PARTIDA_FINALITZADA);
         Joc.ko(jugadorDao.moureLladre(actiu, 1, null), Missatges.PARTIDA_FINALITZADA);

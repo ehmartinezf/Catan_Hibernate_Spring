@@ -1,19 +1,22 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
+import enums.EstatPartida;
+import enums.TipusCarta;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import enums.EstatPartida;
-import enums.TipusCarta;
+import java.util.List;
 
-
-class PuntsIVictoriaTest extends BaseDbTest {
+/*
+ * PRIORITAT 6: punts de victòria (poblat 1, ciutat 2, carta PUNT_VICTORIA 1, exèrcit més gran 2)
+ * i final de la partida quan algú arriba als punts necessaris.
+ */
+class T06_PuntsIVictoriaTest extends BaseDbTest {
 
     private int partida;
     private int a;
@@ -25,6 +28,7 @@ class PuntsIVictoriaTest extends BaseDbTest {
         b = Joc.altre(partida, a);
     }
 
+    // =============================== càlcul de punts ===============================
     @Test
     @DisplayName("Punts = poblats + 2 x ciutats + cartes de punt de victòria")
     void calculDePunts() {
@@ -77,8 +81,11 @@ class PuntsIVictoriaTest extends BaseDbTest {
         assertEquals(2, jugadorDao.calcularPunts(b));
     }
 
+    // =============================== victòria ===============================
     @Test
-    @DisplayName("En construir un poblat que fa arribar als punts necessaris, la partida acaba i guanya aquest jugador")
+    @DisplayName(
+            "En construir un poblat que fa arribar als punts necessaris, la partida acaba i guanya"
+                    + " aquest jugador")
     void victoriaPerPoblat() {
         escenari(3);
         List<Integer> cami = Joc.cami(partida, 3);
@@ -99,10 +106,10 @@ class PuntsIVictoriaTest extends BaseDbTest {
     void victoriaPerCiutat() {
         escenari(3);
         Joc.poblat(a, Joc.vertexs(partida).get(0));
-        Joc.donarCarta(a, TipusCarta.PUNT_VICTORIA, 0); 
+        Joc.donarCarta(a, TipusCarta.PUNT_VICTORIA, 0); // 1 + 1 = 2 punts
         Joc.setRecursos(a, 0, 0, 0, 2, 3);
 
-        Joc.ok(jugadorDao.millorarACiutat(a, Joc.vertexs(partida).get(0))); 
+        Joc.ok(jugadorDao.millorarACiutat(a, Joc.vertexs(partida).get(0))); // 2 + 1 = 3 punts
 
         assertEquals(EstatPartida.FINALITZADA, Joc.estat(partida));
         assertEquals(a, Joc.idGuanyador(partida));

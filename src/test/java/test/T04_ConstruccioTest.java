@@ -1,17 +1,21 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
+import enums.TipusRecurs;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import enums.TipusRecurs;
+import java.util.List;
 
-
-class ConstruccioTest extends BaseDbTest {
+/*
+ * PRIORITAT 4: construir a EN_CURS (carretera, poblat, ciutat): connexió, regla de la distància,
+ * cost en recursos i límits (15 carreteres, 5 poblats, 4 ciutats).
+ * Escenari: camí de vèrtexs p0-p1-p2-p3-p4. L'Anna (a) té un poblat a p0 i una carretera p0-p1.
+ */
+class T04_ConstruccioTest extends BaseDbTest {
 
     private int partida;
     private int a;
@@ -27,6 +31,7 @@ class ConstruccioTest extends BaseDbTest {
         Joc.carretera(a, Joc.arestaEntre(p.get(0), p.get(1)));
     }
 
+    // =============================== carretera ===============================
     @Test
     @DisplayName("Carretera connectada: es construeix i costa 1 fusta + 1 maó")
     void carreteraConnectada() {
@@ -49,10 +54,13 @@ class ConstruccioTest extends BaseDbTest {
         escenari();
         Joc.setRecursos(a, 1, 0, 5, 5, 5);
 
-        Joc.koInici(jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(1), p.get(2))), Missatges.SENSE_RECURSOS);
+        Joc.koInici(
+                jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(1), p.get(2))),
+                Missatges.SENSE_RECURSOS);
 
         assertEquals(1, Joc.carreteres(a));
-        assertEquals(1, Joc.recurs(a, TipusRecurs.FUSTA), "El rollback ha de deixar els recursos igual");
+        assertEquals(
+                1, Joc.recurs(a, TipusRecurs.FUSTA), "El rollback ha de deixar els recursos igual");
     }
 
     @Test
@@ -61,7 +69,9 @@ class ConstruccioTest extends BaseDbTest {
         escenari();
         Joc.donarTot(a, 5);
 
-        Joc.ko(jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(3), p.get(4))), Missatges.NO_CONNECTAT);
+        Joc.ko(
+                jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(3), p.get(4))),
+                Missatges.NO_CONNECTAT);
         assertEquals(25, Joc.total(a));
     }
 
@@ -71,7 +81,9 @@ class ConstruccioTest extends BaseDbTest {
         escenari();
         Joc.donarTot(a, 5);
 
-        Joc.ko(jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(0), p.get(1))), Missatges.ARESTA_OCUPADA);
+        Joc.ko(
+                jugadorDao.construirCarretera(a, Joc.arestaEntre(p.get(0), p.get(1))),
+                Missatges.ARESTA_OCUPADA);
     }
 
     @Test
@@ -81,7 +93,9 @@ class ConstruccioTest extends BaseDbTest {
         int altra = Joc.nova2(partidaDao);
         Joc.donarTot(a, 5);
 
-        Joc.ko(jugadorDao.construirCarretera(a, Joc.arestaLliure(Joc.vertexs(altra).get(0))), Missatges.ALTRA_PARTIDA);
+        Joc.ko(
+                jugadorDao.construirCarretera(a, Joc.arestaLliure(Joc.vertexs(altra).get(0))),
+                Missatges.ALTRA_PARTIDA);
     }
 
     @Test
@@ -100,6 +114,7 @@ class ConstruccioTest extends BaseDbTest {
         assertEquals(15, Joc.carreteres(a));
     }
 
+    // =============================== poblat ===============================
     @Test
     @DisplayName("Poblat connectat per carretera: es construeix i costa fusta, maó, llana i blat")
     void poblatConnectat() {
@@ -186,6 +201,7 @@ class ConstruccioTest extends BaseDbTest {
         assertEquals(5, Joc.poblats(a));
     }
 
+    // =============================== ciutat ===============================
     @Test
     @DisplayName("Millorar poblat a ciutat: costa 2 blat + 3 mineral i el poblat desapareix")
     void millorarACiutat() {
@@ -216,7 +232,8 @@ class ConstruccioTest extends BaseDbTest {
     }
 
     @Test
-    @DisplayName("Només es pot millorar un poblat propi (no un vèrtex buit ni un poblat d'un altre)")
+    @DisplayName(
+            "Només es pot millorar un poblat propi (no un vèrtex buit ni un poblat d'un altre)")
     void millorarSensePoblatPropi() {
         escenari();
         Joc.poblat(b, p.get(3));

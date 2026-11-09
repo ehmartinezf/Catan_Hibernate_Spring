@@ -2,7 +2,9 @@ package dao;
 
 import entities.Jugador;
 import entities.Vertex;
+
 import enums.TipusRecurs;
+
 import java.util.List;
 
 public interface IJugadorDao extends IGenericDao<Jugador, Integer> {
@@ -28,5 +30,4 @@ public interface IJugadorDao extends IGenericDao<Jugador, Integer> {
     String jugarCarta(int idJugador, int idCarta, TipusRecurs recurs);
 
     List<Vertex> vertexsDisponibles(int idJugador);
-    
 }

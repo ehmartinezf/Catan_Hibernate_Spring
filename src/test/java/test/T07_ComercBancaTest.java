@@ -1,15 +1,17 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import enums.TipusRecurs;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import enums.TipusRecurs;
-
-
-class ComercBancaTest extends BaseDbTest {
+/*
+ * PRIORITAT 7: comerç amb la banca (4 recursos iguals per 1 d'un altre tipus).
+ */
+class T07_ComercBancaTest extends BaseDbTest {
 
     private int partida;
     private int a;
@@ -53,7 +55,9 @@ class ComercBancaTest extends BaseDbTest {
         escenari();
         Joc.setRecursos(a, 3, 10, 10, 10, 10);
 
-        Joc.koInici(jugadorDao.comerciarBanca(a, TipusRecurs.FUSTA, TipusRecurs.MINERAL), Missatges.SENSE_RECURSOS);
+        Joc.koInici(
+                jugadorDao.comerciarBanca(a, TipusRecurs.FUSTA, TipusRecurs.MINERAL),
+                Missatges.SENSE_RECURSOS);
 
         assertEquals(3, Joc.recurs(a, TipusRecurs.FUSTA));
         assertEquals(10, Joc.recurs(a, TipusRecurs.MINERAL));
@@ -65,7 +69,9 @@ class ComercBancaTest extends BaseDbTest {
         escenari();
         Joc.donarTot(a, 10);
 
-        Joc.ko(jugadorDao.comerciarBanca(a, TipusRecurs.LLANA, TipusRecurs.LLANA), Missatges.COMERC_IGUALS);
+        Joc.ko(
+                jugadorDao.comerciarBanca(a, TipusRecurs.LLANA, TipusRecurs.LLANA),
+                Missatges.COMERC_IGUALS);
         assertEquals(50, Joc.total(a));
     }
 
@@ -76,7 +82,9 @@ class ComercBancaTest extends BaseDbTest {
         Joc.donarTot(a, 10);
 
         Joc.ko(jugadorDao.comerciarBanca(a, null, TipusRecurs.MAO), Missatges.CAL_DOS_TIPUS_RECURS);
-        Joc.ko(jugadorDao.comerciarBanca(a, TipusRecurs.FUSTA, null), Missatges.CAL_DOS_TIPUS_RECURS);
+        Joc.ko(
+                jugadorDao.comerciarBanca(a, TipusRecurs.FUSTA, null),
+                Missatges.CAL_DOS_TIPUS_RECURS);
         Joc.ko(jugadorDao.comerciarBanca(a, null, null), Missatges.CAL_DOS_TIPUS_RECURS);
         assertEquals(50, Joc.total(a));
     }

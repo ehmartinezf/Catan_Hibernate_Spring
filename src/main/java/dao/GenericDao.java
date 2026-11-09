@@ -1,11 +1,11 @@
 package dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 /*
  * Aquí desenvolupem les funcions que hem definit a la interfície.
@@ -24,7 +24,7 @@ public class GenericDao<T, ID extends Serializable> implements IGenericDao<T, ID
     }
 
     /*
-	 * Ara si, desenvolupem el codi de manera genèrica ja que totes les classes necessiten aquests mètodes
+     * Ara si, desenvolupem el codi de manera genèrica ja que totes les classes necessiten aquests mètodes
      */
     @Override
     public void saveOrUpdate(T entity) {
@@ -93,8 +93,9 @@ public class GenericDao<T, ID extends Serializable> implements IGenericDao<T, ID
         try {
             session.beginTransaction();
             // Fem el SELECT ALL
-            List<T> entities = session.createQuery("FROM " + getEntityClass().getName(), getEntityClass())
-                    .getResultList();
+            List<T> entities =
+                    session.createQuery("FROM " + getEntityClass().getName(), getEntityClass())
+                            .getResultList();
             session.getTransaction().commit();
             return entities;
         } catch (RuntimeException e) {
@@ -103,24 +104,23 @@ public class GenericDao<T, ID extends Serializable> implements IGenericDao<T, ID
         }
     }
 
-    /**
-     * Mètode auxiliar que utilitza reflection per obtenir la classe de
-     * l'entitat
-     */
+    /** Mètode auxiliar que utilitza reflection per obtenir la classe de l'entitat */
     @SuppressWarnings("unchecked")
     private Class<T> getEntityClass() {
-        return (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        return (Class<T>)
+                ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**
-     * Mètode auxiliar per gestionar les excepcions: les mostrem i fem rollback.
-     * És protected perquè també el fan servir els DAO concrets.
-     * RuntimeException i no HibernateException: també volem rollback amb
-     * IllegalArgumentException, IllegalStateException, errors de validació...
+     * Mètode auxiliar per gestionar les excepcions: les mostrem i fem rollback. És protected perquè
+     * també el fan servir els DAO concrets. RuntimeException i no HibernateException: també volem
+     * rollback amb IllegalArgumentException, IllegalStateException, errors de validació...
      */
     protected void handleException(Session session, RuntimeException e) {
         e.printStackTrace();
-        if (session != null && session.getTransaction() != null && session.getTransaction().isActive()) {
+        if (session != null
+                && session.getTransaction() != null
+                && session.getTransaction().isActive()) {
             session.getTransaction().rollback();
         }
     }

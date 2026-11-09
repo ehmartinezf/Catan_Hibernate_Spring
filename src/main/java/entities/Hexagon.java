@@ -1,6 +1,7 @@
 package entities;
 
 import enums.TipusTerreny;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,8 +50,7 @@ public class Hexagon {
     @OneToMany(mappedBy = "hexagon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HexagonVertex> hexagonVertexes = new HashSet<>();
 
-    public Hexagon() {
-    }
+    public Hexagon() {}
 
     public Hexagon(int codi, int q, int r) {
         this.codi = codi;
@@ -147,10 +148,13 @@ public class Hexagon {
     }
 
     @Override
-
     public String toString() {
-        return "Terreny: " + this.terreny + "\n"
-                + "Numero: " + this.numero + "\n"
+        return "Terreny: "
+                + this.terreny
+                + "\n"
+                + "Numero: "
+                + this.numero
+                + "\n"
                 + ((this.terreny.equals(TipusTerreny.DESERT)) ? "Lladre" : "No Lladre");
     }
 }

@@ -1,11 +1,7 @@
 package entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.hibernate.annotations.Check;
-
 import enums.EstatPartida;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
+import org.hibernate.annotations.Check;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "partida")
@@ -254,5 +254,4 @@ public class Partida {
         }
         return getId() != null && getId().equals(other.getId());
     }
-
 }

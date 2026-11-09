@@ -1,8 +1,17 @@
-package test;
+package dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import enums.EstatPartida;
+import enums.TipusRecurs;
+import enums.TipusTerreny;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,16 +20,11 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import enums.EstatPartida;
-import enums.TipusRecurs;
-import enums.TipusTerreny;
-
-class PreparacioTest extends BaseDbTest {
+/*
+ * PRIORITAT 2: la fase de PREPARACIO (cada jugador col·loca 2 poblats + 2 carreteres en ordre de serp).
+ * Si falla, la partida no arriba mai a EN_CURS.
+ */
+class T02_PreparacioTest extends BaseDbTest {
 
     private int partida;
     private int actiu;
@@ -32,6 +36,7 @@ class PreparacioTest extends BaseDbTest {
         primerVertex = Joc.vertexs(partida).get(0);
     }
 
+    // --------------------------------- poblat ---------------------------------
     @Test
     @DisplayName("El poblat de PREPARACIO és gratuït")
     void poblatGratuit() {
@@ -87,12 +92,15 @@ class PreparacioTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirPoblat(actiu, vertexForaneo), Missatges.ALTRA_PARTIDA);
     }
 
+    // --------------------------------- carretera ---------------------------------
     @Test
     @DisplayName("No es pot col·locar la carretera abans del poblat")
     void carreteraAbansDelPoblat() {
         escenari();
 
-        Joc.ko(jugadorDao.construirCarretera(actiu, Joc.arestaLliure(primerVertex)), Missatges.PREP_POBLAT_PRIMER);
+        Joc.ko(
+                jugadorDao.construirCarretera(actiu, Joc.arestaLliure(primerVertex)),
+                Missatges.PREP_POBLAT_PRIMER);
         assertEquals(0, Joc.carreteres(actiu));
     }
 
@@ -115,7 +123,9 @@ class PreparacioTest extends BaseDbTest {
         Joc.ok(jugadorDao.construirPoblat(actiu, primerVertex));
         int lluny = jugadorDao.vertexsDisponibles(actiu).get(0).getId();
 
-        Joc.ko(jugadorDao.construirCarretera(actiu, Joc.arestaLliure(lluny)), Missatges.PREP_CARRETERA_POBLAT);
+        Joc.ko(
+                jugadorDao.construirCarretera(actiu, Joc.arestaLliure(lluny)),
+                Missatges.PREP_CARRETERA_POBLAT);
         assertEquals(0, Joc.carreteres(actiu));
     }
 
@@ -156,6 +166,7 @@ class PreparacioTest extends BaseDbTest {
         Joc.ko(jugadorDao.construirCarretera(actiu, arestaForana), Missatges.ALTRA_PARTIDA);
     }
 
+    // --------------------------------- passar torn ---------------------------------
     @Test
     @DisplayName("No es pot passar torn sense haver col·locat poblat i carretera")
     void passarTornSenseCompletar() {
@@ -168,7 +179,8 @@ class PreparacioTest extends BaseDbTest {
     }
 
     @Test
-    @DisplayName("En passar torn la partida segueix a PREPARACIO i el torn passa al següent jugador")
+    @DisplayName(
+            "En passar torn la partida segueix a PREPARACIO i el torn passa al següent jugador")
     void passarTornDonaElTornAlSeguent() {
         escenari();
         int segon = Joc.jugadors(partida).get(1);
@@ -184,9 +196,11 @@ class PreparacioTest extends BaseDbTest {
 
     @ParameterizedTest(name = "{0} jugadors")
     @ValueSource(ints = {2, 3, 4})
-    @DisplayName("Ordre de serp: 1,2,..,n,n,..,2,1 i després la partida passa a EN_CURS amb el jugador 1")
+    @DisplayName(
+            "Ordre de serp: 1,2,..,n,n,..,2,1 i després la partida passa a EN_CURS amb el jugador"
+                    + " 1")
     void ordreDeSerp(int jugadors) {
-        String[] noms = Arrays.copyOf(new String[]{"Anna", "Bernat", "Carla", "Dani"}, jugadors);
+        String[] noms = Arrays.copyOf(new String[] {"Anna", "Bernat", "Carla", "Dani"}, jugadors);
         int id = Joc.nova(partidaDao, 10, noms);
         List<Integer> ordre = Joc.jugadors(id);
 
@@ -209,7 +223,8 @@ class PreparacioTest extends BaseDbTest {
     }
 
     @Test
-    @DisplayName("En acabar la PREPARACIO cada jugador té 2 poblats, 2 carreteres, 0 ciutats i 2 punts")
+    @DisplayName(
+            "En acabar la PREPARACIO cada jugador té 2 poblats, 2 carreteres, 0 ciutats i 2 punts")
     void resultatDeLaPreparacio() {
         escenari();
         Joc.preparar(jugadorDao, partida);
@@ -229,22 +244,38 @@ class PreparacioTest extends BaseDbTest {
         Joc.preparar(jugadorDao, partida);
 
         for (int j : Joc.jugadors(partida)) {
-            int segonVertex = Joc.llista(Integer.class,
-                    "select p.vertex.id from Poblat p where p.propietari.id = :j order by p.id", "j", j).get(1);
+            int segonVertex =
+                    Joc.llista(
+                                    Integer.class,
+                                    "select p.vertex.id from Poblat p where p.propietari.id = :j"
+                                            + " order by p.id",
+                                    "j",
+                                    j)
+                            .get(1);
             Map<TipusRecurs, Integer> esperat = new EnumMap<>(TipusRecurs.class);
-            for (TipusTerreny t : Joc.llista(TipusTerreny.class,
-                    "select hv.hexagon.terreny from HexagonVertex hv where hv.vertex.id = :v", "v", segonVertex)) {
+            for (TipusTerreny t :
+                    Joc.llista(
+                            TipusTerreny.class,
+                            "select hv.hexagon.terreny from HexagonVertex hv where hv.vertex.id ="
+                                    + " :v",
+                            "v",
+                            segonVertex)) {
                 if (t.getRecurs() != null) {
                     esperat.merge(t.getRecurs(), 1, Integer::sum);
                 }
             }
 
             for (TipusRecurs r : TipusRecurs.values()) {
-                assertEquals(esperat.getOrDefault(r, 0), Joc.recurs(j, r), "Recurs " + r + " del jugador " + j);
+                assertEquals(
+                        esperat.getOrDefault(r, 0),
+                        Joc.recurs(j, r),
+                        "Recurs " + r + " del jugador " + j);
             }
         }
     }
 
+    // --------------------------------- accions no permeses a PREPARACIO
+    // ---------------------------------
     @Test
     @DisplayName("A PREPARACIO no es poden tirar els daus")
     void tirarDausNoPermes() {
@@ -253,16 +284,22 @@ class PreparacioTest extends BaseDbTest {
     }
 
     @Test
-    @DisplayName("A PREPARACIO no es pot comerciar, millorar a ciutat, comprar/jugar cartes ni moure el lladre")
+    @DisplayName(
+            "A PREPARACIO no es pot comerciar, millorar a ciutat, comprar/jugar cartes ni moure el"
+                    + " lladre")
     void accionsNoPermeses() {
         escenari();
         Joc.donarTot(actiu, 10);
 
-        Joc.ko(jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO), Missatges.NOMES_EN_CURS);
+        Joc.ko(
+                jugadorDao.comerciarBanca(actiu, TipusRecurs.FUSTA, TipusRecurs.MAO),
+                Missatges.NOMES_EN_CURS);
         Joc.ko(jugadorDao.millorarACiutat(actiu, primerVertex), Missatges.NOMES_EN_CURS);
         Joc.ko(jugadorDao.comprarCarta(actiu), Missatges.NOMES_EN_CURS);
         Joc.ko(jugadorDao.jugarCarta(actiu, 1, null), Missatges.NOMES_EN_CURS);
-        Joc.ko(jugadorDao.moureLladre(actiu, Joc.hexagonDesert(partida), null), Missatges.NOMES_EN_CURS);
+        Joc.ko(
+                jugadorDao.moureLladre(actiu, Joc.hexagonDesert(partida), null),
+                Missatges.NOMES_EN_CURS);
         assertEquals(50, Joc.total(actiu), "No s'ha d'haver descomptat cap recurs");
     }
 
@@ -273,10 +310,16 @@ class PreparacioTest extends BaseDbTest {
         int altre = Joc.altre(partida, actiu);
 
         Joc.ko(jugadorDao.construirPoblat(altre, primerVertex), Missatges.NO_ES_EL_TEU_TORN);
-        Joc.ko(jugadorDao.construirCarretera(altre, Joc.arestaLliure(primerVertex)), Missatges.NO_ES_EL_TEU_TORN);
+        Joc.ko(
+                jugadorDao.construirCarretera(altre, Joc.arestaLliure(primerVertex)),
+                Missatges.NO_ES_EL_TEU_TORN);
         Joc.ko(jugadorDao.passarTorn(altre), Missatges.NO_ES_EL_TEU_TORN);
     }
 
+    // --------------------------------- ajuda ---------------------------------
+    /**
+     * L'actiu col·loca poblat al primer vèrtex + carretera a una aresta que el toca, i passa torn.
+     */
     private void prepararTornDelPrimer() {
         Joc.ok(jugadorDao.construirPoblat(actiu, primerVertex));
         Joc.ok(jugadorDao.construirCarretera(actiu, Joc.arestaLliure(primerVertex)));

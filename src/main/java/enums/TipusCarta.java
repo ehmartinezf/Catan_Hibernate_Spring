@@ -1,6 +1,7 @@
-
 package enums;
 
 public enum TipusCarta {
-    CAVALLER, MONOPOLI, PUNT_VICTORIA
+    CAVALLER,
+    MONOPOLI,
+    PUNT_VICTORIA
 }

@@ -1,6 +1,5 @@
 package entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,8 +34,7 @@ public class HexagonVertex {
     @JoinColumn(name = "hexagon_id", nullable = false)
     private Hexagon hexagon;
 
-    public HexagonVertex() {
-    }
+    public HexagonVertex() {}
 
     public HexagonVertex(Vertex vertex, int posicio) {
         this.posicio = posicio;
@@ -90,5 +88,4 @@ public class HexagonVertex {
         }
         return getId() != null && getId().equals(other.getId());
     }
-
 }

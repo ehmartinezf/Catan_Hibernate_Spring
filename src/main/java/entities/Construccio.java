@@ -26,39 +26,36 @@ public abstract class Construccio {
     @JoinColumn(name = "jugador_id", nullable = false)
     private Jugador propietari;
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Jugador getPropietari() {
-		return propietari;
-	}
+    public Jugador getPropietari() {
+        return propietari;
+    }
 
-	public void setPropietari(Jugador propietari) {
-		this.propietari = propietari;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Construccio.class.hashCode();
-	}
+    public void setPropietari(Jugador propietari) {
+        this.propietari = propietari;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!(obj instanceof Construccio other))
-			return false;
-		return getId() != null && getId().equals(other.getId());
-	}
+    @Override
+    public int hashCode() {
+        return Construccio.class.hashCode();
+    }
 
-	@Override
-	public String toString() {
-		return "ID: " + this.id + "\n" + 
-				"Propietari: " + this.propietari.getNom();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Construccio other)) return false;
+        return getId() != null && getId().equals(other.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + this.id + "\n" + "Propietari: " + this.propietari.getNom();
+    }
 }

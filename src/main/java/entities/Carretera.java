@@ -20,5 +20,4 @@ public class Carretera extends Construccio {
     public void setAresta(Aresta aresta) {
         this.aresta = aresta;
     }
-
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import entities.Partida;
+
 import java.util.List;
 
 public interface IPartidaDao extends IGenericDao<Partida, Integer> {
@@ -16,5 +17,4 @@ public interface IPartidaDao extends IGenericDao<Partida, Integer> {
     void comprovarVictoria(int idPartida);
 
     String tirarDaus(int idPartida);
-    
 }

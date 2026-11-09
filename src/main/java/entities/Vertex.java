@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Set;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +12,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "vertex")
@@ -38,8 +38,7 @@ public class Vertex {
     @JoinColumn(name = "partida_id", nullable = false)
     private Partida partida;
 
-    public Vertex() {
-    }
+    public Vertex() {}
 
     public Vertex(int codi) {
         this.codi = codi;
@@ -105,5 +104,4 @@ public class Vertex {
         }
         return getId() != null && getId().equals(other.getId());
     }
-
 }

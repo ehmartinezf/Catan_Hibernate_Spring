@@ -12,8 +12,7 @@ public class CsvLector {
 
     private static final String CARPETA = "dades/";
 
-    private CsvLector() {
-    }
+    private CsvLector() {}
 
     public static List<String[]> llegir(String nomFitxer) {
         InputStream is = CsvLector.class.getClassLoader().getResourceAsStream(CARPETA + nomFitxer);
@@ -21,7 +20,8 @@ public class CsvLector {
             throw new IllegalStateException("No s'ha trobat el fitxer " + CARPETA + nomFitxer);
         }
         List<String[]> files = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+        try (BufferedReader br =
+                new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             br.readLine();
             String linia;
             while ((linia = br.readLine()) != null) {
